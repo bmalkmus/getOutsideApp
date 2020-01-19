@@ -1,8 +1,8 @@
 $(document).ready(function(){
-    $('.button-search').click(function() {
-        var inputText = $('#search-input').val();
+    $('#search').click(function() {
+        var inputText = $('.validate').val();
         var queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?name=" + inputText;
-        var results = $('.container');
+        var results = $('#results');
         
         $.ajax({
             url:queryURL,

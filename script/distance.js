@@ -1,4 +1,5 @@
 $('.button-search').click(function() {
+    $('.container').empty();
     var inputText = $('#search-input').val();
     var queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?"
     // var results = $('.container');
@@ -50,6 +51,8 @@ function successFunction(position) {
         for (i = 0; i < Unique.length; i++){
             console.log(Unique[i]);
             let parkDiv = $('<div>').text(Unique[i])
+            $(parkDiv).addClass("park");
+
             $('.container').append(parkDiv );
         }
        

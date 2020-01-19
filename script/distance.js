@@ -50,7 +50,7 @@ function successFunction(position) {
         for (i = 0; i < Unique.length; i++){
             console.log(Unique[i]);
             let parkDiv = $('<div>').text(Unique[i])
-            $('.container').append(parkDiv);
+            $('.container').append(parkDiv );
         }
        
 

@@ -1,19 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Project1</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Squada+One&display=swap" rel="stylesheet">
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="css/materialize.css" media="screen,projection" />
+
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    
+    <title> Park Project</title>
 </head>
-<body>
-    <div id="searchwrap">
-        <input id="search-input" name="search" type="text"/>
-        <input type="submit" class="button-search" value="search"/>
-    </div>
+
+<!--<body class="backgrImg" background="Assets/Background-image.jpg">-->
+    <body>
     <div class="container">
-    </div>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
-    <script src='./script/api.js'></script>    
+
+        <!-- navbar -->
+        <nav>
+            <div class="nav-wrapper blue-grey darken-1">
+                <a href="index.html" class="brand-logo mainLogo">Park & Dinner</a>
+                <ul id="nav-mobile" class="right hide-on-med-and-down">
+                    <li><a href="https://apm.activecommunities.com/seattle/Home">Seattle Parks</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        
+        <div class="row">
+            <h5>Seattle Parks and Recreation Parks With Features</h5>
+        </div>
+
+        <div class="row">
+     
+
+            <!-- Enter Park name -->
+            <div class="input-field col s6 m6">
+                
+                <input id="icon_prefix" type="text" class="validate">
+                <label for="icon_prefix">Park name</label>
+            </div>
+            <!-- Search Button -->
+            <div class="input-field col s2 m2">
+                <a class="waves-effect waves-light btn green" id="search">Search</a>
+            </div>
+
+        </div>
+
+        
+        <div class="row">
+            <!-- Distance -->
+            
+            <div class="input-field col s12 m6">
+                <div>
+                    <label>Max Distance</label>
+                </div>
+                <select id="maxdistance">
+                    <option value="5" selected>5 mi</option>
+                    <option value="10">10 mi</option>
+                    <option value="20">20 mi</option>
+                    <option value="50">50 mi</option>
+                </select>
+                
+            </div>
+            <!-- Park Features -->
+            <div class="input-field col s12 m6">
+                <div>
+                    <label>Park Features</label>
+                </div>
+                <select id="parkfeatures">
+                    <option value="waterfront" selected>Waterfront</option>
+                    <option value="playingarea">Playing Area</option>
+                    <option value="golf">Golf</option>
+                    <option value="fishing">Fishing</option>
+                </select>
+                
+            </div>
+
+
+
+        <!-- results  **add dynamically to results page once results are ready, don't show results until user makes selections -->
+        <div class="row" id="results">
+            <h5>
+                <span id="results" style="display:none">Results</span>
+            </h5>
+        </div>
+
+        <script src="./script/api.js"></script>
+
 </body>
+
 </html>

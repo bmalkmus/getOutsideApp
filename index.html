@@ -37,11 +37,8 @@
         </div>
 
         <div class="row">
-            <!-- Use Current -->
-            <div class="input-field col s12 m4">
-                <a class="waves-effect waves-light btn green" id="currentLoc"><i
-                        class="material-icons right">my_location</i>Use Current</a>
-            </div>
+     
+
             <!-- Enter Park name -->
             <div class="input-field col s6 m6">
                 
@@ -58,26 +55,34 @@
         
         <div class="row">
             <!-- Distance -->
+            
             <div class="input-field col s12 m6">
+                <div>
+                    <label>Max Distance</label>
+                </div>
                 <select id="maxdistance">
                     <option value="5" selected>5 mi</option>
                     <option value="10">10 mi</option>
                     <option value="20">20 mi</option>
                     <option value="50">50 mi</option>
                 </select>
-                <label>Max Distance</label>
+                
             </div>
-            <!-- Distance from park to Food -->
+            <!-- Park Features -->
             <div class="input-field col s12 m6">
-                <select id='distanceToFood'>
-                    <option value="5" selected>5 mi</option>
-                    <option value="10">10 mi</option>
-                    <option value="20">20 mi</option>
-                    <option value="50">50 mi</option>
+                <div>
+                    <label>Park Features</label>
+                </div>
+                <select id="parkfeatures">
+                    <option value="waterfront" selected>Waterfront</option>
+                    <option value="playingarea">Playing Area</option>
+                    <option value="golf">Golf</option>
+                    <option value="fishing">Fishing</option>
                 </select>
-                <label>Distance from Park to Restaurants</label>
+                
             </div>
-        </div>
+
+
 
         <!-- results  **add dynamically to results page once results are ready, don't show results until user makes selections -->
         <div class="row" id="results">

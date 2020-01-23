@@ -1,4 +1,15 @@
 $(document).ready(function(){
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(successFunction, errorFunction);
+    }
+    else{
+        alert("Geolocation is not allowed")}
+
+
+function successFunction(position) {
+    let currentLat = position.coords.latitude;
+    let currentLon = position.coords.longitude;
+
     $('#search').click(function() {
         var inputText = $('.validate').val();
         var queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?name=" + inputText;
@@ -7,7 +18,9 @@ $(document).ready(function(){
         $.ajax({
             url:queryURL,
             method:"GET"
-        }).then(function(response){
+        })
+        
+        .then(function(response){
             var responseString = JSON.stringify(response);
             results.text(responseString);
             // console.log(response);
@@ -19,7 +32,9 @@ $(document).ready(function(){
     $.ajax({
         url: featuresURL,
         method: "GET"
-    }).then(function(response){
+    })
+    
+    .then(function(response){
         
         var i;
         var featuresList = [];
@@ -61,28 +76,20 @@ $('#parkfeatures').click(function() {
 });
 })
 
-$('#maxDistance').click(function() {
+$("#maxDistance").change(function(){
     $('#results').empty();
-    console.log($('#maxDistance').val())
+    console.log(this);
     var inputText =$('#maxDistance').val();
     var queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?"
     // var results = $('.container');
-
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(successFunction, errorFunction);
-    }
-    else{
-        alert("Geolocation is not allowed")}
-
-function successFunction(position) {
-            let currentLat = position.coords.latitude;
-            let currentLon = position.coords.longitude;
 
     
     $.ajax({
         url:queryURL,
         method:"GET"
-    }).then(function(response){
+    })
+    
+    .then(function(response){
         let DistanceList =[];
         for (i = 0; i < response.length; i++){
             parkLat = response[i].ypos;
@@ -124,7 +131,10 @@ function successFunction(position) {
         
     });
 
-};
+});
+
+}
+
 function errorFunction(error){
     switch(error.code) {
         case error.PERMISSION_DENIED:
@@ -142,6 +152,7 @@ function errorFunction(error){
       }
 }
 
-});
 
-  });
+
+
+})

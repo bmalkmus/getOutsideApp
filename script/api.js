@@ -2,7 +2,7 @@ $(document).ready(function(){
     $('#search').click(function() {
         var inputText = $('.validate').val();
         var queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?name=" + inputText;
-        var results = $('#results');
+        var results = $('.results-container');
         
         $.ajax({
             url:queryURL,

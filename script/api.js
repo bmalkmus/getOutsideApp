@@ -12,9 +12,12 @@ $(document).ready(function(){
         for (i = 0; i < response.length; i++) {
             featuresList.push(response[i]['feature_desc']);
             }
+            console.log(featuresList);
             featuresList.sort();
+            console.log(featuresList);
             var newfeaturesList = featuresList.filter(function(elem, index, self) {
                 return index === self.indexOf(elem);
+                console.log(newfeaturesList);
             });
             newfeaturesList.forEach(element => $("#features-input").append("<option value=\""+element+"\">"+element+"</option>"));
             

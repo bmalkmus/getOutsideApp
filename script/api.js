@@ -1,3 +1,27 @@
+function createParkResults(parkName){
+    let parkDiv = $('<div>');
+    $(parkDiv).addClass("park");
+    $(parkDiv).addClass("card blue-grey darken-1");
+    let parkCard = $('<div>');
+    $(parkCard).addClass("card-content white-text");
+    $(parkDiv).append(parkCard);
+    let parkSpan = $('<span>').text(parkName);
+    $(parkSpan).addClass("card-title");
+    $(parkCard).append(parkSpan);
+    let parkImgDiv = $('<div>');
+    $(parkDiv).append(parkImgDiv);
+    let parkImg = $('<img>');
+    $(parkImg).addClass("imgSmall");
+    $(parkImg).attr('id', 'imgSmall');
+    $(parkImg).attr('width', '200');
+    $(parkImg).attr('height', '100');
+    $(parkImg).attr('alt', 'Park Picture');
+    $(parkImgDiv).append(parkImg);
+    
+    return parkDiv;
+}
+
+
 $(document).ready(function(){
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(successFunction, errorFunction);
@@ -81,8 +105,6 @@ $("#maxDistance").change(function(){
     console.log(this);
     var inputText =$('#maxDistance').val();
     var queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?"
-    // var results = $('.container');
-
     
     $.ajax({
         url:queryURL,
@@ -121,10 +143,9 @@ $("#maxDistance").change(function(){
 
         for (i = 0; i < Unique.length; i++){
             console.log(Unique[i]);
-            let parkDiv = $('<div>').text(Unique[i])
-            $(parkDiv).addClass("park");
+            let parkDiv = createParkResults(Unique[i]);
 
-            $('.container').append(parkDiv );
+            $('.results-container').append(parkDiv );
         }
        
 
@@ -155,4 +176,8 @@ function errorFunction(error){
 
 
 
-})
+});
+
+
+  
+  

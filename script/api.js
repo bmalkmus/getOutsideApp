@@ -31,9 +31,6 @@ if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(successFunction, errorFunction);
     }
 
-
-        
-        
 function successFunction(position) {
     let currentLat = position.coords.latitude;
     let currentLon = position.coords.longitude;
@@ -136,6 +133,24 @@ function successFunction(position) {
             var responseString = JSON.stringify(response);
             results.text(responseString);
         });
+    }
+    function errorFunction(error){
+        switch(error.code) {
+            case error.PERMISSION_DENIED:
+              alert("User denied the request for Geolocation.")
+              break;
+            case error.POSITION_UNAVAILABLE:
+              alert("Location information is unavailable.")
+              break;
+            case error.TIMEOUT:
+              alert("The request to get user location timed out.")
+              break;
+            case error.UNKNOWN_ERROR:
+              alert("An unknown error occurred.")
+              break;
+          }
+    }
+
     });
 
     var featuresURL = "https://data.seattle.gov/resource/j9km-ydkc.json?";
@@ -232,12 +247,7 @@ $("#maxDistance").change(function(){
         });
 
         console.log(filteredList)
-
-
-
-        
-
-
+      
         if(DistanceList.length == 0){
             DistanceList.push("No parks within your mile search of current location")
         }

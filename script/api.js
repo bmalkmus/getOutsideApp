@@ -1,3 +1,27 @@
+function createParkResults(parkName){
+    let parkDiv = $('<div>');
+    $(parkDiv).addClass("park");
+    $(parkDiv).addClass("card blue-grey darken-1");
+    let parkCard = $('<div>');
+    $(parkCard).addClass("card-content white-text");
+    $(parkDiv).append(parkCard);
+    let parkSpan = $('<span>').text(parkName);
+    $(parkSpan).addClass("card-title");
+    $(parkCard).append(parkSpan);
+    let parkImgDiv = $('<div>');
+    $(parkDiv).append(parkImgDiv);
+    let parkImg = $('<img>');
+    $(parkImg).addClass("imgSmall");
+    $(parkImg).attr('id', 'imgSmall');
+    $(parkImg).attr('width', '200');
+    $(parkImg).attr('height', '100');
+    $(parkImg).attr('alt', 'Park Picture');
+    $(parkImgDiv).append(parkImg);
+    
+    return parkDiv;
+}
+
+
 $(document).ready(function(){
 
 let ClosestList
@@ -6,8 +30,7 @@ var queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?"
 if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(successFunction, errorFunction);
     }
-else{
-    alert("Geolocation is not allowed")};
+
 
         
         
@@ -92,10 +115,17 @@ function successFunction(position) {
     });
 
 
+    else{
+        alert("Geolocation is not allowed")}
+
+    var currentLat = 0;
+    var currentLon = 0;
+    
+ 
     $('#search').click(function() {
         var inputText = $('.validate').val();
         var queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?name=" + inputText;
-        var results = $('#results');
+        var results = $('.results-container');
         
         $.ajax({
             url:queryURL,
@@ -129,20 +159,6 @@ function successFunction(position) {
             newfeaturesList.forEach(element => $("#parkfeatures").append("<option value=\""+element+"\">"+element+"</option>"));   
 })
 
-$('#search').click(function() {
-    var inputText = $('.validate').val();
-    console.log(inputText);
-    var queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?name=" + inputText;
-    var results = $('#results-container');
-    
-    $.ajax({
-        url:queryURL,
-        method:"GET"
-    }).then(function(response){
-        var responseString = JSON.stringify(response);
-        results.text(responseString);
-    });
-});
 
 
 $('#parkfeatures').click(function() {
@@ -162,12 +178,16 @@ $('#parkfeatures').click(function() {
 });
 })
 
+function successFunction(position) {
+    currentLat = position.coords.latitude;
+    currentLon = position.coords.longitude;
+
+    console.log(position);
+
 $("#maxDistance").change(function(){
     $('#results-container').empty();
     var inputText =$('#maxDistance').val();
-
-    // var results = $('.container');
-
+    var queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?"
     
     $.ajax({
         url:queryURL,
@@ -224,12 +244,11 @@ $("#maxDistance").change(function(){
         Unique = [...new Set(DistanceList)];
 
         Unique.sort();
+        for (i = 0; i < 5; i++){
+            console.log(Unique[i]);
+            let parkDiv = createParkResults(Unique[i]);
 
-        for (i = 0; i < Unique.length; i++){
-            let parkDiv = $('<div>').text(Unique[i])
-            $(parkDiv).addClass("park");
-
-            $('#results-container').append(parkDiv );
+            $('.results-container').append(parkDiv );
         }
        
 
@@ -240,23 +259,40 @@ $("#maxDistance").change(function(){
 
 }
 
-function errorFunction(error){
-    switch(error.code) {
-        case error.PERMISSION_DENIED:
-          alert("User denied the request for Geolocation.")
-          break;
-        case error.POSITION_UNAVAILABLE:
-          alert("Location information is unavailable.")
-          break;
-        case error.TIMEOUT:
-          alert("The request to get user location timed out.")
-          break;
-        case error.UNKNOWN_ERROR:
-          alert("An unknown error occurred.")
-          break;
-      }
-}
+    function errorFunction(error){
+        switch(error.code) {
+            case error.PERMISSION_DENIED:
+            alert("User denied the request for Geolocation.")
+            break;
+            case error.POSITION_UNAVAILABLE:
+            alert("Location information is unavailable.")
+            break;
+            case error.TIMEOUT:
+            alert("The request to get user location timed out.")
+            break;
+            case error.UNKNOWN_ERROR:
+            alert("An unknown error occurred.")
+            break;
+        }
+    }
+
+    // event handler for Rest. search
+
+    $(document).on("click", ".park", function(){
+        const c = 10;
+        var zomatoApiKey = 'f56d7ccb219fb8cce1bdc7e70b526b2f';
+        var queryURL = "https://developers.zomato.com/api/v2.1/search?entity_type=city&count=" + c + "&";
+        queryURL += 'lat=' + currentLat + '&lon=' + currentLon;
 
 
-// https://developers.zomato.com/api/v2.1/geocode?lat=47.600931&lon=-122.286548&apikey=3bd2eec0a051217d2a66562300ac5619
-})
+        $.ajax({
+            method: "GET",
+            url:queryURL,
+            headers: { "user-key": zomatoApiKey },
+        })
+        .then(function(response){
+            console.log(response);
+            $("#restaurants").text(JSON.stringify(response));
+        });
+    })
+});

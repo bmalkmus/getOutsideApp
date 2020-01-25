@@ -11,14 +11,12 @@
     <link type="text/css" rel="stylesheet" href="css/materialize.css" media="screen,projection" />
 
     <link rel="stylesheet" type="text/css" href="css/style.css">
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     
     <title> Park Project</title>
 </head>
 
-<!--<body class="backgrImg" background="Assets/Background-image.jpg">-->
-    <body>
+
+    <body class="backgrImg" background="Assets/background_mountain.jpg">
     <div class="container">
 
         <!-- navbar -->
@@ -85,7 +83,7 @@
                 
             </div>
 
-
+        </div>
 
         <!-- results  **add dynamically to results page once results are ready, don't show results until user makes selections -->
         <div class="row">
@@ -96,15 +94,14 @@
         <!-- Results cards -->
 
         <!-- Row 1 -->
-        <div class="row" style="display: none;">
-            <!-- Trail Column Left -->
-            <div class="col s6 m6">
-                <div class="card blue-grey darken-1">
+        <div class="row">
+            <!-- park Column Left -->
+            <div class="col s6 m6 results-container">
+                <div class="card blue-grey darken-1" style="display: none;">
                     <div class="card-content white-text">
                         <span class="card-title">Park Name</span>
-                        <p></p>
-                        <p></p>
-                        <p></p>
+                        <p>Features</p>
+                        <p>Hours</p>
                     </div>
                     <div>
                         <img id="imgSmall" src="#" class="imgSmall" alt="Park Picture" height=100 width=200>
@@ -115,8 +112,8 @@
                 </div>
             </div>
             <!-- Food Column Right -->
-            <div class="col s6 m6">
-                <div class="card blue-grey darken-1">
+            <div class="col s6 m6" id="restaurants" >
+                <div style="display:none" class="card blue-grey darken-1">
                     <div class="card-content white-text">
                         <span class="card-title">Restaurant Name</span>
                         <p>Dist to restaurant</p>
@@ -133,12 +130,10 @@
             </div>
         </div>
     </div>
-    <!-- Script puts results here -->
-    <div class="container">
-        <div class="results-container"></div>
-    </div>
 
-        <script src="./script/api.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src='./script/distance.js'></script>
+    <script src="./script/api.js"></script>
 
 </body>
 

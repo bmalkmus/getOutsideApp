@@ -94,6 +94,9 @@ function successFunction(position) {
 
     console.log(position);
 
+    let ClosestList
+    var queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?"
+
 $("#maxDistance").change(function(){
     $('#results').empty();
     console.log(this);
@@ -149,6 +152,81 @@ $("#maxDistance").change(function(){
 
 });
 
+    // Upon loading, this is the code to populate some of the information for the closest park from the user computer
+    $.ajax({
+        url:queryURL,
+        method:"GET"
+    })
+
+    .then(function(response){
+        ClosestList = [];
+
+        for (i = 0; i < response.length; i++){
+            parkLat = response[i].ypos;
+            parkLon = response[i].xpos;
+            var radlat1 = Math.PI * currentLat/180;
+            var radlat2 = Math.PI * parkLat/180;
+            var theta = currentLon-parkLon;
+            var radtheta = Math.PI * theta/180;
+            var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+            if (dist > 1) {
+                    dist = 1;
+            }
+                dist = Math.acos(dist);
+                dist = dist * 180/Math.PI;
+                dist = dist * 60 * 1.1515;
+
+                let parkName =response[i].name;
+                let parkResult = {parkName, dist};
+                ClosestList.push(parkResult);
+        }
+
+
+        filteredList = $.grep(ClosestList, function(v) {
+            return v.dist > .0001;
+
+        });
+
+        filteredList.sort(function(a,b){
+            return a.dist - b.dist
+        });
+
+        let longDist = filteredList[0].dist
+        let roundedDist = longDist.toFixed(2);
+
+        let inputText = filteredList[0].parkName;
+        let queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?name=" + inputText;
+        let results = $('.results-container');
+
+        $.ajax({
+            url:queryURL,
+            method:"GET"
+        }).then(function(response){
+            console.log(response[0].feature_desc);
+             let closetPark = $('<h3>').text('Closest Park to your Current Location: '+inputText);
+             let parkFeat = $('<div>')
+
+            let featTitle = $('<h4>').text(("Park Features:"))
+             let parkHours = $('<h4>').text('Hours: ' + response[0].hours);
+             let parkDist = $('<h4>').text ('Distance to Park: ' + roundedDist + ' miles');
+            $(parkFeat).append(featTitle);
+             for (i=0; i < response.length; i ++){
+                 let singleFeat = $('<p>').text(response[i].feature_desc);
+                 console.log (singleFeat);
+                 $(parkFeat).append(singleFeat);
+             }
+            $(results).append(closetPark);
+            $(results).append(parkFeat);
+            //  console.log(parkFeat);
+            $(results).append(parkHours);
+            $(results).append(parkDist);
+
+
+
+            // var responseString = JSON.stringify(response);
+            // results.text(responseString);
+        });
+    });
 }
 
 function errorFunction(error){

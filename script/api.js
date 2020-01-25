@@ -36,6 +36,46 @@ function createParkResults(parkObject){
     return parkDiv;
 }
 
+function createRestResults(restObject){
+    console.log(restObject);
+    let restDiv = $('<div>');
+    $(restDiv).addClass("rest");
+    $(restDiv).addClass("card blue-grey darken-1");
+    let restCard = $('<div>');
+    $(restCard).addClass("card-content white-text");
+    $(restDiv).append(restCard);
+    let restSpan = $('<span>').text(restObject.restaurant.name);
+    $(restSpan).addClass("card-title");
+    $(restCard).append(restSpan);
+    // let selectParkLong = $('<p>').text(parkObject.xpos);
+    // let selectParkLat = $('<p>').text(parkObject.ypos);
+    // $(selectParkLong).attr('style','display:none');
+    // $(selectParkLong).attr('class',"selectParkLong");
+    // $(selectParkLat).attr('style', 'display:none');
+    // $(selectParkLat).attr('class', "selectParkLat");
+    let restP1 = $('<p>').text('Cuisines:  ' + restObject.restaurant.cuisines);
+    // let restP2 = $('<p>').text('Stars: ' + restObject.restaurant.user-rating.aggregate_rating);
+    $(restCard).append(restP1);
+    // $(restCard).append(restP2);
+    let restImgDiv = $('<div>');
+    $(restDiv).append(restImgDiv);
+    let restImg = $('<img>');
+    $(restImg).addClass("imgSmall");
+    $(restImg).attr('id', 'imgSmall');
+    $(restImg).attr('width', '200');
+    $(restImg).attr('height', '100');
+    $(restImg).attr('alt', 'Rest Pictures');
+    $(restImgDiv).append(restImg);
+    let restLink = $('<a>');
+    $(restLink).attr('href', restObject.restaurant.url);
+    $(restLink).text(restObject.restaurant.url);
+    $(restDiv).append(restLink);
+    // $(restDiv).append(selectParkLong);
+    // $(restDiv).append(selectParkLat);
+    
+    return restDiv;
+}
+
 
 $(document).ready(function(){
 
@@ -289,8 +329,16 @@ $(document).on("click", ".park", function(){
         headers: { "user-key": zomatoApiKey },
     })
     .then(function(response){
+        $('#restaurants').empty();
+        // console.log(response);
         // console.log(response.restaurants[2]);
-        $("#restaurants").text(JSON.stringify(response));
+        // $("#restaurants").text(JSON.stringify(response));
+        for (i = 0; i < 5; i++){
+            let restDiv = createRestResults(response.nearby_restaurants[i]);
+            console.log(restDiv);
+
+            $('#restaurants').append(restDiv);
+        }
     });
 })
 }

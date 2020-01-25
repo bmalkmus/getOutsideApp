@@ -84,7 +84,7 @@ function successFunction(position) {
 
         let inputText = filteredList[0].parkName;
         let queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?name=" + inputText;
-        let results = $('#results-container');
+        let results = $('.results-container');
     
         $.ajax({
             url:queryURL,
@@ -117,8 +117,7 @@ function successFunction(position) {
         });
     });
 
-    // var currentLat = 0;
-    // var currentLon = 0;
+  
     
  
     $('#search').click(function() {
@@ -162,29 +161,23 @@ function successFunction(position) {
 
 $('#parkfeatures').click(function() {
     var featureText = $('#parkfeatures').val();
-    $('#results-container').empty();
+    $('.results-container').empty();
     var queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?feature_desc=" + featureText;
-    var results = $('#results-container');
+    var results = $('.results-container');
     $.ajax({
         url:queryURL,
         method:"GET"
     }).then(function(response){
-        // var responseString = JSON.stringify(response);
-        // results.text(responseString);
+      
         for (i = 0; i < response.length; i ++){
             results.append(response[i].name+"<br>")
         }
 });
 })
 
-// function successFunction(position) {
-//     currentLat = position.coords.latitude;
-//     currentLon = position.coords.longitude;
-
-//     console.log(position);
 
 $("#maxDistance").change(function(){
-    $('#results-container').empty();
+    $('.results-container').empty();
     var inputText =$('#maxDistance').val();
     var queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?"
     
@@ -240,7 +233,7 @@ $("#maxDistance").change(function(){
 
 });
 
-// }
+
 
 
 // event handler for Rest. search

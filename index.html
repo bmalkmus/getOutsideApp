@@ -11,14 +11,12 @@
     <link type="text/css" rel="stylesheet" href="css/materialize.css" media="screen,projection" />
 
     <link rel="stylesheet" type="text/css" href="css/style.css">
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     
     <title> Park Project</title>
 </head>
 
-<!--<body class="backgrImg" background="Assets/Background-image.jpg">-->
-    <body>
+
+    <body class="backgrImg" background="Assets/background_mountain.jpg">
     <div class="container">
 
         <!-- navbar -->
@@ -62,7 +60,6 @@
                 </div>
                 <select id="maxDistance">
                     <option  class = "miles" selected disabled>Select your max distance</option>
-                    <option  class = "miles" value="2">2 mi</option>
                     <option  class = "miles" value="5">5 mi</option>
                     <option  class = "miles" value="10">10 mi</option>
                     <option  class = "miles" value="20">20 mi</option>
@@ -83,10 +80,8 @@
 
         </div>
 
-        <!-- results  **add dynamically to results page once results are ready, don't show results until user makes selection
-
+        <!-- results  **add dynamically to results page once results are ready, don't show results until user makes selections -->
         <div class="row">
-
             <h5>
                 <span id="results" style="display:none">Results</span>
             </h5>
@@ -100,9 +95,8 @@
                 <div class="card blue-grey darken-1" style="display: none;">
                     <div class="card-content white-text">
                         <span class="card-title">Park Name</span>
-                        <p></p>
-                        <p></p>
-                        <p></p>
+                        <p>Features</p>
+                        <p>Hours</p>
                     </div>
                     <div>
                         <img id="imgSmall" src="#" class="imgSmall" alt="Park Picture" height=100 width=200>
@@ -131,13 +125,11 @@
             </div>
         </div>
     </div>
-    <!-- Script puts results here -->
-    <div class="container">
-        <div class="results-container"></div>
-    </div>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
-    <script src='./script/distance.js'></script>    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src='./script/distance.js'></script>
     <script src="./script/api.js"></script>
+
 </body>
 
 </html>

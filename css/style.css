@@ -7,3 +7,56 @@
 select{
     display: block;
 }
+
+h5 {
+    font-family: 'Squada One', cursive;
+}
+
+.card-title{
+    font-family: 'Squada One', cursive;
+}
+
+.mainLogo {
+    margin-left: 15px;
+}
+
+@media screen and (max-width: 768px) {
+    
+    .mainLogo {
+        font-size: 1.2rem !important;
+        margin: 0px !important;
+    }
+    nav {
+        width: 70% !important;
+        margin: auto !important;
+    }
+    #search {
+        margin-left: 35px;
+    }
+    .card-title {
+        font-size: 20px !important;
+    }
+}
+
+
+
+@media screen and (max-width: 410px) {
+    .mainLogo {
+        font-size: .9rem !important;
+        margin: 0px !important;
+    }
+    nav {
+        width: 70% !important;
+        margin: auto !important;
+    }
+    .card-title {
+        font-size: 16px !important;
+    }
+}
+
+.imgSmall {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}

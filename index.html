@@ -62,6 +62,7 @@
                 </div>
                 <select id="maxDistance">
                     <option  class = "miles" selected disabled>Select your max distance</option>
+                    <option  class = "miles" value="2">2 mi</option>
                     <option  class = "miles" value="5">5 mi</option>
                     <option  class = "miles" value="10">10 mi</option>
                     <option  class = "miles" value="20">20 mi</option>
@@ -80,10 +81,12 @@
                 
             </div>
 
+        </div>
 
+        <!-- results  **add dynamically to results page once results are ready, don't show results until user makes selection
 
-        <!-- results  **add dynamically to results page once results are ready, don't show results until user makes selections -->
         <div class="row">
+
             <h5>
                 <span id="results" style="display:none">Results</span>
             </h5>
@@ -91,10 +94,10 @@
         <!-- Results cards -->
 
         <!-- Row 1 -->
-        <div class="row" style="display: none;">
-            <!-- Trail Column Left -->
-            <div class="col s6 m6">
-                <div class="card blue-grey darken-1">
+        <div class="row">
+            <!-- park Column Left -->
+            <div class="col s6 m6 results-container">
+                <div class="card blue-grey darken-1" style="display: none;">
                     <div class="card-content white-text">
                         <span class="card-title">Park Name</span>
                         <p></p>
@@ -110,8 +113,8 @@
                 </div>
             </div>
             <!-- Food Column Right -->
-            <div class="col s6 m6">
-                <div class="card blue-grey darken-1">
+            <div class="col s6 m6" id="restaurants" >
+                <div style="display:none" class="card blue-grey darken-1">
                     <div class="card-content white-text">
                         <span class="card-title">Restaurant Name</span>
                         <p>Dist to restaurant</p>

@@ -27,26 +27,26 @@ function successFunction(position) {
         });
     });
 
-    var featuresURL = "https://data.seattle.gov/resource/j9km-ydkc.json?";
-    var results = $('#results');
-    $.ajax({
-        url: featuresURL,
-        method: "GET"
-    })
+//     var featuresURL = "https://data.seattle.gov/resource/j9km-ydkc.json?";
+//     var results = $('#results');
+//     $.ajax({
+//         url: featuresURL,
+//         method: "GET"
+//     })
     
-    .then(function(response){
+//     .then(function(response){
         
-        var i;
-        var featuresList = [];
-        for (i = 0; i < response.length; i++) {
-            featuresList.push(response[i]['feature_desc']);
-            }
-            featuresList.sort();
-            var newfeaturesList = featuresList.filter(function(elem, index, self) {
-                return index === self.indexOf(elem);
-            });
-            newfeaturesList.forEach(element => $("#parkfeatures").append("<option value=\""+element+"\">"+element+"</option>"));   
-})
+//         var i;
+//         var featuresList = [];
+//         for (i = 0; i < response.length; i++) {
+//             featuresList.push(response[i]['feature_desc']);
+//             }
+//             featuresList.sort();
+//             var newfeaturesList = featuresList.filter(function(elem, index, self) {
+//                 return index === self.indexOf(elem);
+//             });
+//             newfeaturesList.forEach(element => $("#parkfeatures").append("<option value=\""+element+"\">"+element+"</option>"));   
+// })
 
 // $('.park-search').click(function() {
 //     var inputText = $('#search-input').val();
@@ -64,7 +64,6 @@ function successFunction(position) {
 // });
 $('#parkfeatures').click(function() {
     var featureText = $('#parkfeatures').val();
-    console.log(featureText);
     var queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?feature_desc=" + featureText;
     var results = $('#results');
     $.ajax({
@@ -78,7 +77,6 @@ $('#parkfeatures').click(function() {
 
 $("#maxDistance").change(function(){
     $('#results').empty();
-    console.log(this);
     var inputText =$('#maxDistance').val();
     var queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?"
     // var results = $('.container');
@@ -90,7 +88,12 @@ $("#maxDistance").change(function(){
     })
     
     .then(function(response){
+        // Created new variables "FeaturesList" and "CombinedList" to pull additional info from the location based results, 
         let DistanceList =[];
+        // features list is used to pull the features to populate the drop down list
+        let FeaturesList=[];
+        // combined list saves the available parks in an arry with the format {park, feature, park2, feature2}
+        let CombinedList=[];
         for (i = 0; i < response.length; i++){
             parkLat = response[i].ypos;
             parkLon = response[i].xpos;
@@ -110,25 +113,43 @@ $("#maxDistance").change(function(){
         if (!dist == NaN || dist <= inputText){
 
             DistanceList.push(response[i].name);
+            FeaturesList.push(response[i].feature_desc);
+            CombinedList.push(response[i].name, response[i].feature_desc);
         }
         }
         if(DistanceList.length == 0){
             DistanceList.push("No parks within your mile search of current location")
         }
         Unique = [...new Set(DistanceList)];
+        UniqueFeatures =[...new Set(FeaturesList)];
 
         Unique.sort();
+        // The below functions sort the retrieved features and append them to the drop down list
+        UniqueFeatures.sort();
+        UniqueFeatures.forEach(element => $("#parkfeatures").append("<option value=\""+element+"\">"+element+"</option>"));
+        
 
-        for (i = 0; i < Unique.length; i++){
-            console.log(Unique[i]);
+        // Moved the display results into a "search2" button, 
+        $("#search2").on("click", function(event){
+            $('.results-container').empty();
+            // if user did not select a feature, basic search function is applied
+        if($("#parkfeatures option:selected").text()=="No Preference"){
+           
+            for (i = 0; i < Unique.length; i++){
             let parkDiv = $('<div>').text(Unique[i])
             $(parkDiv).addClass("park");
-
-            $('.container').append(parkDiv );
+            $('.results-container').append(parkDiv);
         }
-       
-
-        
+    } else{
+        // if a feature is chosen, its compared to the Combined list and prints the park name and feature
+            let selectedFeature = $("#parkfeatures option:selected").text();
+            for (i=0; i < CombinedList.length; i++){
+                if (CombinedList[i] == selectedFeature){
+                    $('.results-container').append("Park: "+CombinedList[i-1] +" Features: "+ CombinedList[i]+"<br>");
+                }
+            }
+        }
+    })
     });
 
 });

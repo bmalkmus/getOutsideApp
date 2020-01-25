@@ -1,13 +1,26 @@
-function createParkResults(parkName){
+let selectParkLat;
+let selectParkLong;
+
+function createParkResults(parkObject){
     let parkDiv = $('<div>');
     $(parkDiv).addClass("park");
     $(parkDiv).addClass("card blue-grey darken-1");
     let parkCard = $('<div>');
     $(parkCard).addClass("card-content white-text");
     $(parkDiv).append(parkCard);
-    let parkSpan = $('<span>').text(parkName);
+    let parkSpan = $('<span>').text(parkObject.name);
     $(parkSpan).addClass("card-title");
     $(parkCard).append(parkSpan);
+    let selectParkLong = $('<p>').text(parkObject.xpos);
+    let selectParkLat = $('<p>').text(parkObject.ypos);
+    $(selectParkLong).attr('display','none');
+    $(selectParkLong).attr('id',"selectParkLong");
+    $(selectParkLat).attr('display', 'none');
+    $(selectParkLat).attr('id', "selectParkLat");
+    let parkP1 = $('<p>').text('Features: ' + parkObject.feature_desc);
+    let parkP2 = $('<p>').text('Hours: ' + parkObject.hours);
+    $(parkCard).append(parkP1);
+    $(parkCard).append(parkP2);
     let parkImgDiv = $('<div>');
     $(parkDiv).append(parkImgDiv);
     let parkImg = $('<img>');
@@ -17,6 +30,8 @@ function createParkResults(parkName){
     $(parkImg).attr('height', '100');
     $(parkImg).attr('alt', 'Park Picture');
     $(parkImgDiv).append(parkImg);
+    $(parkDiv).append(selectParkLong);
+    $(parkDiv).append(selectParkLat);
     
     return parkDiv;
 }
@@ -92,7 +107,7 @@ function successFunction(position) {
         })
         
         .then(function(response){
-            console.log(response[0].feature_desc);
+            // console.log(response[0].feature_desc);
              let closetPark = $('<h3>').text('Closest Park to your Current Location: '+inputText);
              let parkFeat = $('<div>')
 
@@ -102,7 +117,7 @@ function successFunction(position) {
             $(parkFeat).append(featTitle);
              for (i=0; i < response.length; i ++){
                  let singleFeat = $('<p>').text(response[i].feature_desc);
-                 console.log (singleFeat);
+                //  console.log (singleFeat);
                  $(parkFeat).append(singleFeat);
              }
             $(results).append(closetPark);
@@ -118,7 +133,9 @@ function successFunction(position) {
     });
 
   
-    
+    $('input').on('focus', function() {
+        $('label').hide();  
+    });
  
     $('#search').click(function() {
         var inputText = $('.validate').val();
@@ -131,8 +148,23 @@ function successFunction(position) {
         })
         
         .then(function(response){
-            var responseString = JSON.stringify(response);
-            results.text(responseString);
+            // var responseString = JSON.stringify(response);
+            // results.text(responseString);
+            $('.results-container').empty();
+            let closetPark = $('<h3>').text(inputText);
+             let parkFeat = $('<div>')
+
+            let featTitle = $('<h4>').text(("Park Features:"))
+             let parkHours = $('<h4>').text('Hours: ' + response[0].hours);
+            $(parkFeat).append(featTitle);
+             for (i=0; i < response.length; i ++){
+                 let singleFeat = $('<p>').text(response[i].feature_desc);
+                 console.log (singleFeat);
+                 $(parkFeat).append(singleFeat);
+             }
+            $(results).append(closetPark);
+            $(results).append(parkFeat);
+            $(results).append(parkHours);
         });
     });
 
@@ -205,14 +237,14 @@ $("#maxDistance").change(function(){
         dist = dist * 60 * 1.1515;
 
 
-        if (!dist == NaN || dist <= inputText){
-
+        if (dist > .001 || dist <= inputText){
             DistanceList.push(response[i].name);
         }
 
         }
 
         if(DistanceList.length == 0){
+
             DistanceList.push("No parks within your mile search of current location")
         }
 
@@ -222,7 +254,7 @@ $("#maxDistance").change(function(){
 
         for (i = 0; i < 5; i++){
             console.log(Unique[i]);
-            let parkDiv = createParkResults(Unique[i]);
+            let parkDiv = createParkResults(response[i]);
 
             $('.results-container').append(parkDiv );
         }
@@ -239,11 +271,16 @@ $("#maxDistance").change(function(){
 // event handler for Rest. search
 
 $(document).on("click", ".park", function(){
-    const c = 10;
+    selectParkLat = $('#selectParkLat').text();
+    selectParkLong =$('#selectParkLong').text();
+    const c = 5;
     var zomatoApiKey = 'f56d7ccb219fb8cce1bdc7e70b526b2f';
-    var queryURL = "https://developers.zomato.com/api/v2.1/search?entity_type=city&count=" + c + "&";
-    queryURL += 'lat=' + currentLat + '&lon=' + currentLon;
+    // var queryURL = "https://developers.zomato.com/api/v2.1/search?entity_type=city&count=" + c + "&";
+    // queryURL += 'lat=' + $('#selectParkLat').text() + '&lon=' + $('#selectParkLong').text();
     
+    var queryURL = "https://developers.zomato.com/api/v2.1/geocode?lat="+selectParkLat+"&lon="+selectParkLong+"&apikey=" + zomatoApiKey+"count="+c;
+
+    console.log(queryURL);
     
     $.ajax({
         method: "GET",
@@ -251,7 +288,7 @@ $(document).on("click", ".park", function(){
         headers: { "user-key": zomatoApiKey },
     })
     .then(function(response){
-        console.log(response);
+        // console.log(response.restaurants[2]);
         $("#restaurants").text(JSON.stringify(response));
     });
 })

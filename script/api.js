@@ -231,7 +231,7 @@ function successFunction(position) {
 
 
 
-$('#parkfeatures').click(function() {
+$('#parkfeatures').change(function() {
     var featureText = $('#parkfeatures').val();
     $('.results-container').empty();
  var queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?feature_desc=" + featureText;
@@ -313,10 +313,10 @@ $("#maxDistance").change(function(){
             // if user did not select a feature, basic search function is applied
         if($("#parkfeatures option:selected").text()=="No Preference"){
            
-            for (i = 0; i < Unique.length; i++){
-            let parkDiv = $('<div>').text(Unique[i])
-            $(parkDiv).addClass("park");
-            $('.results-container').append(parkDiv);
+            // for (i = 0; i < Unique.length; i++){
+            // let parkDiv = $('<div>').text(Unique[i])
+            // $(parkDiv).addClass("park");
+            // $('.results-container').append(parkDiv);
 
         $('.results-container').empty();
 
@@ -324,10 +324,12 @@ $("#maxDistance").change(function(){
             // console.log(Unique[i]);
             let parkDiv = createParkResults(response[i]);
 
-            $('.results-container').append(parkDiv );
+            $('.results-container').append(parkDiv);
  
         }
-    } else{
+    } 
+    
+    else {
         // if a feature is chosen, its compared to the Combined list and prints the park name and feature
             let selectedFeature = $("#parkfeatures option:selected").text();
             for (i=0; i < CombinedList.length; i++){

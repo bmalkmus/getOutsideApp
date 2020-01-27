@@ -1,5 +1,7 @@
 let selectParkLat;
 let selectParkLong;
+let parkCard
+let feat
 
 function createParkResults(parkObject){
     let parkDiv = $('<div>');
@@ -17,9 +19,9 @@ function createParkResults(parkObject){
     $(selectParkLong).attr('class',"selectParkLong");
     $(selectParkLat).attr('style', 'display:none');
     $(selectParkLat).attr('class', "selectParkLat");
-    let parkP1 = $('<p>').text('Features: ' + parkObject.feature_desc);
+    // let parkP1 = $('<p>').text('Features: ' + parkObject.feature_desc);
     let parkP2 = $('<p>').text('Hours: ' + parkObject.hours);
-    $(parkCard).append(parkP1);
+    // $(parkCard).append(parkP1);
     $(parkCard).append(parkP2);
     let parkImgDiv = $('<div>');
     $(parkDiv).append(parkImgDiv);
@@ -170,6 +172,7 @@ function successFunction(position) {
             // var responseString = JSON.stringify(response);
             // results.text(responseString);
         });
+
     });
 
   
@@ -312,42 +315,80 @@ $(".dropdown").change(function getResults(){
             $('.results-container').empty();
             // if user did not select a feature, basic search function is applied
         if($("#parkfeatures option:selected").text()=="No Preference"){
-            console.log($("#parkfeatures option:selected").text());
-           
-            // for (i = 0; i < Unique.length; i++){
-            // let parkDiv = $('<div>').text(Unique[i])
-            // $(parkDiv).addClass("park");
-            // $('.results-container').append(parkDiv);
-
+        //     console.log($("#parkfeatures option:selected").text());
         $('.results-container').empty();
-
+        
         for (i = 0; i < 5; i++){
-            // console.log(Unique[i]);
-            let parkDiv = createParkResults(response[i]);
-
+            let inputText = Unique[i];
+            let queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?name=" + inputText;
+            let results = $('.results-container');
+            
+            $.ajax({
+                url:queryURL,
+                method:"GET"
+            })
+            
+            .then(function(response){
+                feat = new Array();
+                let parkDiv = createParkResults(response[0]);
+                for (i = 0; i < response.length; i++){   
+                feat.push(response[i].feature_desc);
+            }
+            let parkP1 = $('<p>').text('Features: ' + feat);
+            $(parkCard).append(parkP1);
             $('.results-container').append(parkDiv);
  
-        }
+        })
+    }
+        //     // for (i = 0; i < Unique.length; i++){
+        //     // let parkDiv = $('<div>').text(Unique[i])
+        //     // $(parkDiv).addClass("park");
+        //     // $('.results-container').append(parkDiv);
+
+        // $('.results-container').empty();
+
+        // for (i = 0; i < 5; i++){
+        //     // console.log(Unique[i]);
+        //     let parkDiv = createParkResults(response[i]);
+
+        //     $('.results-container').append(parkDiv);
+ 
+        // }
     } 
     
     else {
-        console.log("feature chosen");
+        // console.log("feature chosen");
         // if a feature is chosen, its compared to the Combined list and prints the park name and feature
             let selectedFeature = $("#parkfeatures option:selected").text();
-            console.log(selectedFeature);
+            for (i = 0; i < 5; i++){
+                let inputText = Unique[i];
+                let queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?name=" + inputText;
+                let results = $('.results-container');
+                
+                $.ajax({
+                    url:queryURL,
+                    method:"GET"
+                })
+                
+                .then(function(response){
+            // console.log(selectedFeature);
             for (i=0; i < response.length; i++){
                 if (response[i].feature_desc == selectedFeature){
                     let parkDiv = createParkResults(response[i]);
+                    let parkP1 = $('<p>').text('Features: ' + feat);
+            $(parkCard).append(parkP1);
+
                         $('.results-container').append(parkDiv);
                     
-                }
+                // }
             }
         }
     
     });
 
-});
+}};
 
+})
 
 
 // event handler for Rest. search
@@ -381,9 +422,14 @@ $(document).on("click", ".park", function(){
         }
     });
 })
+
+})
+
+
 }
 
-function errorFunction (error){
+
+function errorFunction(error){
     switch(error.code) {
         case error.PERMISSION_DENIED:
         alert("User denied the request for Geolocation.")

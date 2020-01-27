@@ -1,13 +1,14 @@
 let selectParkLat;
 let selectParkLong;
-let parkCard
-let feat
+let parkCard;
+let feat;
+let parkP1;
 
 function createParkResults(parkObject){
     let parkDiv = $('<div>');
     $(parkDiv).addClass("park");
     $(parkDiv).addClass("card blue-grey darken-1");
-    let parkCard = $('<div>');
+    parkCard = $('<div>');
     $(parkCard).addClass("card-content white-text");
     $(parkDiv).append(parkCard);
     let parkSpan = $('<span>').text(parkObject.name);
@@ -39,7 +40,7 @@ function createParkResults(parkObject){
 }
 
 function createRestResults(restObject){
-    console.log(restObject);
+    // console.log(restObject);
     let restDiv = $('<div>');
     $(restDiv).addClass("rest");
     $(restDiv).addClass("card blue-grey darken-1");
@@ -202,7 +203,7 @@ function successFunction(position) {
             $(parkFeat).append(featTitle);
              for (i=0; i < response.length; i ++){
                  let singleFeat = $('<p>').text(response[i].feature_desc);
-                 console.log (singleFeat);
+                //  console.log (singleFeat);
                  $(parkFeat).append(singleFeat);
              }
             $(results).append(closetPark);
@@ -284,7 +285,7 @@ $(".dropdown").change(function getResults(){
         dist = dist * 60 * 1.1515;
 
 
-        if (dist > .001 || dist <= inputText){
+        if (dist > .001 && dist <= inputText){
             DistanceList.push(response[i].name);
             FeaturesList.push(response[i].feature_desc);
             CombinedList.push(response[i].name, response[i].feature_desc);
@@ -318,7 +319,7 @@ $(".dropdown").change(function getResults(){
         //     console.log($("#parkfeatures option:selected").text());
         $('.results-container').empty();
         
-        for (i = 0; i < 5; i++){
+        for (i = 0; i < Unique.length; i++){
             let inputText = Unique[i];
             let queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?name=" + inputText;
             let results = $('.results-container');
@@ -334,7 +335,7 @@ $(".dropdown").change(function getResults(){
                 for (i = 0; i < response.length; i++){   
                 feat.push(response[i].feature_desc);
             }
-            let parkP1 = $('<p>').text('Features: ' + feat);
+            parkP1 = $('<p>').text('Features: ' + feat);
             $(parkCard).append(parkP1);
             $('.results-container').append(parkDiv);
  
@@ -360,23 +361,24 @@ $(".dropdown").change(function getResults(){
         // console.log("feature chosen");
         // if a feature is chosen, its compared to the Combined list and prints the park name and feature
             let selectedFeature = $("#parkfeatures option:selected").text();
-            for (i = 0; i < 5; i++){
+            // console.log(Unique);
+            for (i = 0; i < Unique.length; i++){
                 let inputText = Unique[i];
                 let queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?name=" + inputText;
                 let results = $('.results-container');
-                
                 $.ajax({
                     url:queryURL,
                     method:"GET"
                 })
                 
                 .then(function(response){
-            // console.log(selectedFeature);
             for (i=0; i < response.length; i++){
-                if (response[i].feature_desc == selectedFeature){
+                if (response[i].feature_desc === selectedFeature){
+                    $(feat).push(response[i].feature_desc);
                     let parkDiv = createParkResults(response[i]);
-                    let parkP1 = $('<p>').text('Features: ' + feat);
-            $(parkCard).append(parkP1);
+                    parkP1 = $('<p>').text('Features: ' + response[i].feature_desc);
+                    $(parkCard).append(parkP1);
+
 
                         $('.results-container').append(parkDiv);
                     
@@ -416,7 +418,7 @@ $(document).on("click", ".park", function(){
         // $("#restaurants").text(JSON.stringify(response));
         for (i = 0; i < 5; i++){
             let restDiv = createRestResults(response.nearby_restaurants[i]);
-            console.log(restDiv);
+            // console.log(restDiv);
 
             $('#restaurants').append(restDiv);
         }

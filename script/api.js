@@ -244,15 +244,15 @@ $(".dropdown").change(function getResults(){
             parkLat = response[i].ypos;
             parkLon = response[i].xpos;
             var radlat1 = Math.PI * currentLat/180;
-		var radlat2 = Math.PI * parkLat/180;
-		var theta = currentLon-parkLon;
-		var radtheta = Math.PI * theta/180;
-		var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-		if (dist > 1) {
-			dist = 1;
-		}
-		dist = Math.acos(dist);
-		dist = dist * 180/Math.PI;
+        var radlat2 = Math.PI * parkLat/180;
+        var theta = currentLon-parkLon;
+        var radtheta = Math.PI * theta/180;
+        var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+        if (dist > 1) {
+            dist = 1;
+        }
+        dist = Math.acos(dist);
+        dist = dist * 180/Math.PI;
         dist = dist * 60 * 1.1515;
 
 
@@ -290,13 +290,13 @@ $(".dropdown").change(function getResults(){
             }
 
         shuffle(Unique);
-
+        console.log(Unique);
         // The below functions sort the retrieved features and append them to the drop down list
         UniqueFeatures.sort();
         UniqueFeatures.forEach(element => $("#parkfeatures").append("<option value=\""+element+"\">"+element+"</option>"));
   
      // if user did not select a feature, basic search function is applied
-        if($("#parkfeatures option:selected").text() === "No Preference"){
+    if($("#parkfeatures option:selected").text() === "No Preference"){
         $('.results-container').empty();
 
         $('#restuarants').empty();
@@ -332,15 +332,14 @@ $(".dropdown").change(function getResults(){
             for (i = 0; i < Unique.length; i++){
                 let inputText = Unique[i];
                 let queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?name=" + inputText;
-                let results = $('.results-container');
                 $.ajax({
-                    url:queryURL,
-                    method:"GET"
-                })
+            url:queryURL,
+            method:"GET"
+                 })
                 
                 .then(function(response){
             for (i=0; i < response.length; i++){
-                    console.log(response[i])
+
                 if (response[i].feature_desc === selectedFeature){
                     $(feat).push(response[i].feature_desc);
                     let parkDiv = createParkResults(response[i]);
@@ -351,16 +350,17 @@ $(".dropdown").change(function getResults(){
                         $('.results-container').append(parkDiv);
                     
                 
+                }
             }
-        }
     
-    });
+                });
 
-}};
+            }
+    };
 
-})
+    })
 
-
+});
 // event handler for Rest. search
 
 $(document).on("click",".park",function(){
@@ -385,33 +385,30 @@ $(document).on("click",".park",function(){
         $('#restaurants').append(closeRests);
         for (i = 0; i < 5; i++){
             let restDiv = createRestResults(response.nearby_restaurants[i]);
-
             $('#restaurants').append(restDiv);
         }
     });
-})
-
-})
-
+});
 
 }
-
 
 function errorFunction(error){
-    switch(error.code) {
-        case error.PERMISSION_DENIED:
-        alert("User denied the request for Geolocation.")
-        break;
-        case error.POSITION_UNAVAILABLE:
-        alert("Location information is unavailable.")
-        break;
-        case error.TIMEOUT:
-        alert("The request to get user location timed out.")
-        break;
-        case error.UNKNOWN_ERROR:
-        alert("An unknown error occurred.")
-        break;
-    }
+        switch(error.code) {
+            case error.PERMISSION_DENIED:
+            alert("User denied the request for Geolocation.")
+            break;
+            case error.POSITION_UNAVAILABLE:
+            alert("Location information is unavailable.")
+            break;
+            case error.TIMEOUT:
+            alert("The request to get user location timed out.")
+            break;
+            case error.UNKNOWN_ERROR:
+            alert("An unknown error occurred.")
+            break;
+        }
 }
-
+    
 });
+
+

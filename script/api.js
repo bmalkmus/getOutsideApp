@@ -141,6 +141,7 @@ function successFunction(position) {
         .then(function(response){
              let closePark = $('<h5>').text('The Closest Park to your Current Location');
             $('#results').append(closePark);
+
             feat = new Array();
             for (i = 0; i < response.length; i++){   
                 feat.push(" " + response[i].feature_desc);
@@ -178,7 +179,8 @@ function successFunction(position) {
             }
     });
 
-        });
+
+       // });
 
         
 
@@ -217,6 +219,8 @@ function successFunction(position) {
         });
     });
 
+
+
 $(".dropdown").change(function getResults(){
     $('#restaurants').empty();
     $('#results').empty();
@@ -244,15 +248,15 @@ $(".dropdown").change(function getResults(){
             parkLat = response[i].ypos;
             parkLon = response[i].xpos;
             var radlat1 = Math.PI * currentLat/180;
-		var radlat2 = Math.PI * parkLat/180;
-		var theta = currentLon-parkLon;
-		var radtheta = Math.PI * theta/180;
-		var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-		if (dist > 1) {
-			dist = 1;
-		}
-		dist = Math.acos(dist);
-		dist = dist * 180/Math.PI;
+        var radlat2 = Math.PI * parkLat/180;
+        var theta = currentLon-parkLon;
+        var radtheta = Math.PI * theta/180;
+        var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+        if (dist > 1) {
+            dist = 1;
+        }
+        dist = Math.acos(dist);
+        dist = dist * 180/Math.PI;
         dist = dist * 60 * 1.1515;
 
 
@@ -289,8 +293,9 @@ $(".dropdown").change(function getResults(){
             return arr;
             }
 
-        shuffle(Unique);
 
+        shuffle(Unique);
+        console.log(Unique);
         // The below functions sort the retrieved features and append them to the drop down list
         UniqueFeatures.sort();
         UniqueFeatures.forEach(element => $("#parkfeatures").append("<option value=\""+element+"\">"+element+"</option>"));
@@ -305,6 +310,7 @@ $(".dropdown").change(function getResults(){
             if(Unique[i] !== "Thornton Creek Park #1" || Unique[i] !== "Carkeek Park"){
             let inputText = Unique[i];
             let queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?name=" + inputText;
+
             
             $.ajax({
                 url:queryURL,
@@ -386,32 +392,32 @@ $(document).on("click",".park",function(){
         for (i = 0; i < 5; i++){
             let restDiv = createRestResults(response.nearby_restaurants[i]);
 
-            $('#restaurants').append(restDiv);
-        }
-    });
-})
-
-})
-
-
-}
-
-
-function errorFunction(error){
-    switch(error.code) {
-        case error.PERMISSION_DENIED:
-        alert("User denied the request for Geolocation.")
-        break;
-        case error.POSITION_UNAVAILABLE:
-        alert("Location information is unavailable.")
-        break;
-        case error.TIMEOUT:
-        alert("The request to get user location timed out.")
-        break;
-        case error.UNKNOWN_ERROR:
-        alert("An unknown error occurred.")
-        break;
+        
+                    $('#restaurants').append(restDiv);
+                }
+            });
+        })
+        
+        })
     }
-}
 
-});
+
+    function errorFunction(error){
+        switch(error.code) {
+            case error.PERMISSION_DENIED:
+            alert("User denied the request for Geolocation.")
+            break;
+            case error.POSITION_UNAVAILABLE:
+            alert("Location information is unavailable.")
+            break;
+            case error.TIMEOUT:
+            alert("The request to get user location timed out.")
+            break;
+            case error.UNKNOWN_ERROR:
+            alert("An unknown error occurred.")
+            break;
+        }
+    }
+    
+    });
+            

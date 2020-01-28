@@ -337,6 +337,7 @@ $("#maxDistance").change(function(){
 
         $('.results-container').empty();
         $('#restuarants').empty();
+        
 
         for (i = 0; i < 5; i++){
             // console.log(Unique[i]);

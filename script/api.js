@@ -40,7 +40,6 @@ function createParkResults(parkObject){
 }
 
 function createRestResults(restObject){
-    // console.log(restObject);
     let restDiv = $('<div>');
     $(restDiv).addClass("rest");
     $(restDiv).addClass("card light green darken-1");
@@ -50,16 +49,8 @@ function createRestResults(restObject){
     let restSpan = $('<span>').text(restObject.restaurant.name);
     $(restSpan).addClass("card-title");
     $(restCard).append(restSpan);
-    // let selectParkLong = $('<p>').text(parkObject.xpos);
-    // let selectParkLat = $('<p>').text(parkObject.ypos);
-    // $(selectParkLong).attr('style','display:none');
-    // $(selectParkLong).attr('class',"selectParkLong");
-    // $(selectParkLat).attr('style', 'display:none');
-    // $(selectParkLat).attr('class', "selectParkLat");
     let restP1 = $('<p>').text('Cuisine :  ' + restObject.restaurant.cuisines);
-    // let restP2 = $('<p>').text('Stars: ' + restObject.restaurant.user-rating.aggregate_rating);
     $(restCard).append(restP1);
-    // $(restCard).append(restP2);
     let restImgDiv = $('<div>');
     $(restDiv).append(restImgDiv);
     let restImg = $('<img>');
@@ -73,9 +64,7 @@ function createRestResults(restObject){
     $(restLink).attr('href', restObject.restaurant.url);
     $(restLink).text(restObject.restaurant.url);
     $(restDiv).append(restLink);
-    // $(restDiv).append(selectParkLong);
-    // $(restDiv).append(selectParkLat);
-    
+
     return restDiv;
 }
 
@@ -150,31 +139,11 @@ function successFunction(position) {
         })
         
         .then(function(response){
-            // console.log(response[0].feature_desc);
              let closePark = $('<h5>').text('The Closest Park to your Current Location');
-            // let parkFeat = $('<div>')
-
-            //let featTitle = $('<h4>').text(("Park Features:"))
-             //let parkHours = $('<h4>').text('Hours: ' + response[0].hours);
-             //let parkDist = $('<h4>').text ('Distance to Park: ' + roundedDist + ' miles');
-            //$(parkFeat).append(featTitle);
-             //for (i=0; i < response.length; i ++){
-               //  let singleFeat = $('<p>').text(response[i].feature_desc);
-                //  console.log (singleFeat);
-                 //$(parkFeat).append(singleFeat);
-             //}
             $('#results').append(closePark);
-            //$(results).append(parkFeat);
-            //$(results).append(parkHours);
-            //$(results).append(parkDist);
             let closestparkDiv = createParkResults(response[0]);
-
             $('.results-container').append(closestparkDiv);
 
-
-
-            // var responseString = JSON.stringify(response);
-            // results.text(responseString);
         });
 
     });
@@ -201,26 +170,10 @@ function successFunction(position) {
         })
         
         .then(function(response){
-            // var responseString = JSON.stringify(response);
-            // results.text(responseString);
             $('.results-container').empty();
 
             $('#results').empty();
             $('#restaurants').empty();
-           // let closetPark = $('<h3>').text(inputText);
-           //  let parkFeat = $('<div>')
-
-           // let featTitle = $('<h4>').text(("Park Features:"))
-           //  let parkHours = $('<h4>').text('Hours: ' + response[0].hours);
-           // $(parkFeat).append(featTitle);
-            //for (i=0; i < response.length; i ++){
-                 //let singleFeat = $('<p>').text(response[i].feature_desc);
-                // console.log (singleFeat);
-                // $(parkFeat).append(singleFeat);
-             //}
-           // $(results).append(closetPark);
-          //  $(results).append(parkFeat);
-           // $(results).append(parkHours);
            let searchparkDiv = createParkResults(response[0]);
 
            $('.results-container').append(searchparkDiv);
@@ -268,8 +221,6 @@ $('#parkfeatures').change(function() {
             $('.results-container').append(parkDiv);
         }
 });
-})
-
 
 
 $(".dropdown").change(function getResults(){
@@ -293,15 +244,15 @@ $(".dropdown").change(function getResults(){
             parkLat = response[i].ypos;
             parkLon = response[i].xpos;
             var radlat1 = Math.PI * currentLat/180;
-		var radlat2 = Math.PI * parkLat/180;
-		var theta = currentLon-parkLon;
-		var radtheta = Math.PI * theta/180;
-		var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-		if (dist > 1) {
-			dist = 1;
-		}
-		dist = Math.acos(dist);
-		dist = dist * 180/Math.PI;
+        var radlat2 = Math.PI * parkLat/180;
+        var theta = currentLon-parkLon;
+        var radtheta = Math.PI * theta/180;
+        var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+        if (dist > 1) {
+            dist = 1;
+        }
+        dist = Math.acos(dist);
+        dist = dist * 180/Math.PI;
         dist = dist * 60 * 1.1515;
 
 
@@ -323,8 +274,23 @@ $(".dropdown").change(function getResults(){
         Unique = [...new Set(DistanceList)];
         UniqueFeatures =[...new Set(FeaturesList)];
 
-        Unique.sort();
+        function shuffle(arr){
 
+            var i = arr.length;
+            var j;
+            var temp;
+            
+            while(--i>0){
+                j = Math.floor(Math.random()*(i+1));
+                temp = arr[j];
+                arr[j] = arr[i];
+                arr[i] = temp;
+            }
+            return arr;
+            }
+
+        shuffle(Unique);
+        console.log(Unique);
         // The below functions sort the retrieved features and append them to the drop down list
         UniqueFeatures.sort();
         UniqueFeatures.forEach(element => $("#parkfeatures").append("<option value=\""+element+"\">"+element+"</option>"));
@@ -344,11 +310,11 @@ $(".dropdown").change(function getResults(){
 
         $('#restuarants').empty();
         
-        for (i = 0; i < Unique.length; i++){
-            if(Unique[i] !== "Thornton Creek Park #1"){
+        for (i = 0; i < 5; i++){
+            if(Unique[i] !== "Thornton Creek Park #1" || Unique[i] !== "Carkeek Park"){
             let inputText = Unique[i];
             let queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?name=" + inputText;
-            // console.log(queryURL);
+            console.log(queryURL);
             
             $.ajax({
                 url:queryURL,
@@ -389,7 +355,6 @@ $(".dropdown").change(function getResults(){
         // console.log("feature chosen");
         // if a feature is chosen, its compared to the Combined list and prints the park name and feature
             let selectedFeature = $("#parkfeatures option:selected").text();
-            // console.log(Unique);
             for (i = 0; i < Unique.length; i++){
                 let inputText = Unique[i];
                 let queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?name=" + inputText;
@@ -411,70 +376,63 @@ $(".dropdown").change(function getResults(){
 
                         $('.results-container').append(parkDiv);
                     
-                // }
-            }
-        }
-    
-    });
-
-}};
-
-})
-
-
-// event handler for Rest. search
-
-$(document).on("click", ".park", function(){
-    selectParkLat = $(this).children()[3].textContent
-    selectParkLong =$(this).children()[2].textContent
-    const c = 5;
-    var zomatoApiKey = 'f56d7ccb219fb8cce1bdc7e70b526b2f';
-    // var queryURL = "https://developers.zomato.com/api/v2.1/search?entity_type=city&count=" + c + "&";
-    // queryURL += 'lat=' + $('#selectParkLat').text() + '&lon=' + $('#selectParkLong').text();
-    
-    var queryURL = "https://developers.zomato.com/api/v2.1/geocode?lat="+selectParkLat+"&lon="+selectParkLong+"&apikey=" + zomatoApiKey+"count="+c;
-
-    
-    $.ajax({
-        method: "GET",
-        url:queryURL,
-        headers: { "user-key": zomatoApiKey },
-    })
-    .then(function(response){
-        $('#restaurants').empty();
-        // console.log(response);
-        // console.log(response.restaurants[2]);
-        // $("#restaurants").text(JSON.stringify(response));
-        for (i = 0; i < 5; i++){
-            let restDiv = createRestResults(response.nearby_restaurants[i]);
-            // console.log(restDiv);
-
-            $('#restaurants').append(restDiv);
-        }
-    });
-})
-
-})
-
-
-}
-
-
-function errorFunction(error){
-    switch(error.code) {
-        case error.PERMISSION_DENIED:
-        alert("User denied the request for Geolocation.")
-        break;
-        case error.POSITION_UNAVAILABLE:
-        alert("Location information is unavailable.")
-        break;
-        case error.TIMEOUT:
-        alert("The request to get user location timed out.")
-        break;
-        case error.UNKNOWN_ERROR:
-        alert("An unknown error occurred.")
-        break;
+                
+                    }
+                }
+            
+            });
+        
+        }};
+        
+        })
+        
+        
+        // event handler for Rest. search
+        
+        $(document).on("click", ".park", function(){
+            selectParkLat = $(this).children()[3].textContent
+            selectParkLong =$(this).children()[2].textContent
+            const c = 5;
+            var zomatoApiKey = 'f56d7ccb219fb8cce1bdc7e70b526b2f';
+            
+            var queryURL = "https://developers.zomato.com/api/v2.1/geocode?lat="+selectParkLat+"&lon="+selectParkLong+"&apikey=" + zomatoApiKey+"count="+c;
+        
+            
+            $.ajax({
+                method: "GET",
+                url:queryURL,
+                headers: { "user-key": zomatoApiKey },
+            })
+            .then(function(response){
+                $('#restaurants').empty();
+                for (i = 0; i < 5; i++){
+                    let restDiv = createRestResults(response.nearby_restaurants[i]);
+        
+                    $('#restaurants').append(restDiv);
+                }
+            });
+        })
+        
+        })
     }
-}
 
-});
+
+    function errorFunction(error){
+        switch(error.code) {
+            case error.PERMISSION_DENIED:
+            alert("User denied the request for Geolocation.")
+            break;
+            case error.POSITION_UNAVAILABLE:
+            alert("Location information is unavailable.")
+            break;
+            case error.TIMEOUT:
+            alert("The request to get user location timed out.")
+            break;
+            case error.UNKNOWN_ERROR:
+            alert("An unknown error occurred.")
+            break;
+        }
+    }
+    
+    });
+            

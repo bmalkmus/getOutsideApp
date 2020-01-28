@@ -21,7 +21,7 @@ function createParkResults(parkObject){
     $(selectParkLat).attr('style', 'display:none');
     $(selectParkLat).attr('class', "selectParkLat");
     // let parkP1 = $('<p>').text('Features: ' + parkObject.feature_desc);
-    let parkP2 = $('<p>').text('Hours: ' + parkObject.hours);
+    let parkP2 = $('<p>').html('Hours: ' + parkObject.hours);
     // $(parkCard).append(parkP1);
     $(parkCard).append(parkP2);
     let parkImgDiv = $('<div>');

@@ -182,6 +182,47 @@ function successFunction(position) {
         });
     });
 
+//     var featuresURL = "https://data.seattle.gov/resource/j9km-ydkc.json?";
+//     var results = $('#results');
+//     $.ajax({
+//         url: featuresURL,
+//         method: "GET"
+//     })
+    
+//     .then(function(response){
+        
+//         var i;
+//         var featuresList = [];
+//         for (i = 0; i < response.length; i++) {
+//             featuresList.push(response[i]['feature_desc']);
+//             }
+//             featuresList.sort();
+//             var newfeaturesList = featuresList.filter(function(elem, index, self) {
+//                 return index === self.indexOf(elem);
+//             });
+//             newfeaturesList.forEach(element => $("#parkfeatures").append("<option value=\""+element+"\">"+element+"</option>"));   
+// })
+
+
+
+$('#parkfeatures').change(function() {
+    var featureText = $('#parkfeatures').val();
+    var queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?feature_desc=" + featureText;
+    var results = $('.results-container');
+    $.ajax({
+        url:queryURL,
+        method:"GET"
+    }).then(function(response){
+        $('.results-container').empty();
+        $('#results').empty();
+        $('#restaurants').empty();
+        for (i = 0; i < response.length; i ++){
+            let parkDiv = createParkResults(response[i]);
+            $('.results-container').append(parkDiv);
+        }
+});
+
+
 $(".dropdown").change(function getResults(){
     $('.results-container').empty();
     var inputText =$('#maxDistance').val();

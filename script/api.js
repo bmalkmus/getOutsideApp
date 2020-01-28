@@ -141,6 +141,10 @@ function successFunction(position) {
         .then(function(response){
              let closePark = $('<h5>').text('The Closest Park to your Current Location');
             $('#results').append(closePark);
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2a004a1bc24ed72ab5bafacca027ba070e02e672
             feat = new Array();
             for (i = 0; i < response.length; i++){   
                 feat.push(" " + response[i].feature_desc);
@@ -178,7 +182,12 @@ function successFunction(position) {
             }
     });
 
+<<<<<<< HEAD
         });
+=======
+
+       // });
+>>>>>>> 2a004a1bc24ed72ab5bafacca027ba070e02e672
 
         
 
@@ -217,6 +226,11 @@ function successFunction(position) {
         });
     });
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 2a004a1bc24ed72ab5bafacca027ba070e02e672
 $(".dropdown").change(function getResults(){
     $('#restaurants').empty();
     $('#results').empty();
@@ -288,6 +302,10 @@ $(".dropdown").change(function getResults(){
             }
             return arr;
             }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2a004a1bc24ed72ab5bafacca027ba070e02e672
 
         shuffle(Unique);
         console.log(Unique);
@@ -305,6 +323,10 @@ $(".dropdown").change(function getResults(){
             if(Unique[i] !== "Thornton Creek Park #1" || Unique[i] !== "Carkeek Park"){
             let inputText = Unique[i];
             let queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?name=" + inputText;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2a004a1bc24ed72ab5bafacca027ba070e02e672
             
             $.ajax({
                 url:queryURL,
@@ -350,7 +372,10 @@ $(".dropdown").change(function getResults(){
                         $('.results-container').append(parkDiv);
                     
                 
+<<<<<<< HEAD
                 }
+=======
+>>>>>>> 2a004a1bc24ed72ab5bafacca027ba070e02e672
             }
     
                 });
@@ -385,10 +410,23 @@ $(document).on("click",".park",function(){
         $('#restaurants').append(closeRests);
         for (i = 0; i < 5; i++){
             let restDiv = createRestResults(response.nearby_restaurants[i]);
+<<<<<<< HEAD
             $('#restaurants').append(restDiv);
         }
     });
 });
+=======
+
+        
+                    $('#restaurants').append(restDiv);
+                }
+            });
+        })
+        
+        })
+    }
+
+>>>>>>> 2a004a1bc24ed72ab5bafacca027ba070e02e672
 
 }
 

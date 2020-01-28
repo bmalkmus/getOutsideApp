@@ -43,7 +43,7 @@ function createRestResults(restObject){
     // console.log(restObject);
     let restDiv = $('<div>');
     $(restDiv).addClass("rest");
-    $(restDiv).addClass("card blue-grey darken-1");
+    $(restDiv).addClass("card light green darken-1");
     let restCard = $('<div>');
     $(restCard).addClass("card-content white-text");
     $(restDiv).append(restCard);
@@ -56,7 +56,7 @@ function createRestResults(restObject){
     // $(selectParkLong).attr('class',"selectParkLong");
     // $(selectParkLat).attr('style', 'display:none');
     // $(selectParkLat).attr('class', "selectParkLat");
-    let restP1 = $('<p>').text('Cuisines:  ' + restObject.restaurant.cuisines);
+    let restP1 = $('<p>').text('Cuisine :  ' + restObject.restaurant.cuisines);
     // let restP2 = $('<p>').text('Stars: ' + restObject.restaurant.user-rating.aggregate_rating);
     $(restCard).append(restP1);
     // $(restCard).append(restP2);
@@ -151,22 +151,25 @@ function successFunction(position) {
         
         .then(function(response){
             // console.log(response[0].feature_desc);
-             let closetPark = $('<h3>').text('Closest Park to your Current Location: '+inputText);
-             let parkFeat = $('<div>')
+             let closePark = $('<h5>').text('The Closest Park to your Current Location');
+            // let parkFeat = $('<div>')
 
-            let featTitle = $('<h4>').text(("Park Features:"))
-             let parkHours = $('<h4>').text('Hours: ' + response[0].hours);
-             let parkDist = $('<h4>').text ('Distance to Park: ' + roundedDist + ' miles');
-            $(parkFeat).append(featTitle);
-             for (i=0; i < response.length; i ++){
-                 let singleFeat = $('<p>').text(response[i].feature_desc);
+            //let featTitle = $('<h4>').text(("Park Features:"))
+             //let parkHours = $('<h4>').text('Hours: ' + response[0].hours);
+             //let parkDist = $('<h4>').text ('Distance to Park: ' + roundedDist + ' miles');
+            //$(parkFeat).append(featTitle);
+             //for (i=0; i < response.length; i ++){
+               //  let singleFeat = $('<p>').text(response[i].feature_desc);
                 //  console.log (singleFeat);
-                 $(parkFeat).append(singleFeat);
-             }
-            $(results).append(closetPark);
-            $(results).append(parkFeat);
-            $(results).append(parkHours);
-            $(results).append(parkDist);
+                 //$(parkFeat).append(singleFeat);
+             //}
+            $('#results').append(closePark);
+            //$(results).append(parkFeat);
+            //$(results).append(parkHours);
+            //$(results).append(parkDist);
+            let closestparkDiv = createParkResults(response[0]);
+
+            $('.results-container').append(closestparkDiv);
 
 
 
@@ -181,6 +184,12 @@ function successFunction(position) {
         $('label').hide();  
     });
  
+    $('input').on('focusout', function() {
+        if($('#icon_prefix').val().length == 0){
+            $('label').show();
+        }  
+    });
+
     $('#search').click(function() {
         var inputText = $('.validate').val();
         var queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?name=" + inputText;
@@ -195,20 +204,28 @@ function successFunction(position) {
             // var responseString = JSON.stringify(response);
             // results.text(responseString);
             $('.results-container').empty();
-            let closetPark = $('<h3>').text(inputText);
-             let parkFeat = $('<div>')
 
-            let featTitle = $('<h4>').text(("Park Features:"))
-             let parkHours = $('<h4>').text('Hours: ' + response[0].hours);
-            $(parkFeat).append(featTitle);
-             for (i=0; i < response.length; i ++){
-                 let singleFeat = $('<p>').text(response[i].feature_desc);
-                //  console.log (singleFeat);
-                 $(parkFeat).append(singleFeat);
-             }
-            $(results).append(closetPark);
-            $(results).append(parkFeat);
-            $(results).append(parkHours);
+            $('#results').empty();
+            $('#restaurants').empty();
+           // let closetPark = $('<h3>').text(inputText);
+           //  let parkFeat = $('<div>')
+
+           // let featTitle = $('<h4>').text(("Park Features:"))
+           //  let parkHours = $('<h4>').text('Hours: ' + response[0].hours);
+           // $(parkFeat).append(featTitle);
+            //for (i=0; i < response.length; i ++){
+                 //let singleFeat = $('<p>').text(response[i].feature_desc);
+                // console.log (singleFeat);
+                // $(parkFeat).append(singleFeat);
+             //}
+           // $(results).append(closetPark);
+          //  $(results).append(parkFeat);
+           // $(results).append(parkHours);
+           let searchparkDiv = createParkResults(response[0]);
+
+           $('.results-container').append(searchparkDiv);
+            
+
         });
     });
 
@@ -235,21 +252,24 @@ function successFunction(position) {
 
 
 
-// $('#parkfeatures, #parkfeatures').change(function() {
-//     var featureText = $('#parkfeatures').val();
-//     $('.results-container').empty();
-//  var queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?feature_desc=" + featureText;
-//     var results = $('.results-container');
-//     $.ajax({
-//         url:queryURL,
-//         method:"GET"
-//     }).then(function(response){
-      
-//         for (i = 0; i < response.length; i ++){
-//             results.append(response[i].name+"<br>")
-//         }
-// });
-// })
+$('#parkfeatures').change(function() {
+    var featureText = $('#parkfeatures').val();
+    var queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?feature_desc=" + featureText;
+    var results = $('.results-container');
+    $.ajax({
+        url:queryURL,
+        method:"GET"
+    }).then(function(response){
+        $('.results-container').empty();
+        $('#results').empty();
+        $('#restaurants').empty();
+        for (i = 0; i < response.length; i ++){
+            let parkDiv = createParkResults(response[i]);
+            $('.results-container').append(parkDiv);
+        }
+});
+})
+
 
 
 $(".dropdown").change(function getResults(){
@@ -311,12 +331,18 @@ $(".dropdown").change(function getResults(){
     
 
         // Moved the display results into a "search2" button, 
+
+            
+
         
             // $('.results-container').empty();
+  
             // if user did not select a feature, basic search function is applied
         if($("#parkfeatures option:selected").text() === "No Preference"){
         //     console.log($("#parkfeatures option:selected").text());
         $('.results-container').empty();
+
+        $('#restuarants').empty();
         
         for (i = 0; i < Unique.length; i++){
             if(Unique[i] !== "Thornton Creek Park #1"){

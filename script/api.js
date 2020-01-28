@@ -290,7 +290,6 @@ $(".dropdown").change(function getResults(){
             FeaturesList.push(response[i].feature_desc);
             CombinedList.push(response[i].name, response[i].feature_desc);
 
-            DistanceList.push(response[i]);
  
         }
 
@@ -313,16 +312,17 @@ $(".dropdown").change(function getResults(){
 
         // Moved the display results into a "search2" button, 
         
-            $('.results-container').empty();
+            // $('.results-container').empty();
             // if user did not select a feature, basic search function is applied
-        if($("#parkfeatures option:selected").text()=="No Preference"){
+        if($("#parkfeatures option:selected").text() === "No Preference"){
         //     console.log($("#parkfeatures option:selected").text());
         $('.results-container').empty();
         
         for (i = 0; i < Unique.length; i++){
+            if(Unique[i] !== "Thornton Creek Park #1"){
             let inputText = Unique[i];
             let queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?name=" + inputText;
-            let results = $('.results-container');
+            // console.log(queryURL);
             
             $.ajax({
                 url:queryURL,
@@ -330,10 +330,11 @@ $(".dropdown").change(function getResults(){
             })
             
             .then(function(response){
+                console.log(response)
                 feat = new Array();
                 let parkDiv = createParkResults(response[0]);
                 for (i = 0; i < response.length; i++){   
-                feat.push(response[i].feature_desc);
+                feat.push(" " + response[i].feature_desc);
             }
             parkP1 = $('<p>').text('Features: ' + feat);
             $(parkCard).append(parkP1);
@@ -341,6 +342,7 @@ $(".dropdown").change(function getResults(){
  
         })
     }
+}
         //     // for (i = 0; i < Unique.length; i++){
         //     // let parkDiv = $('<div>').text(Unique[i])
         //     // $(parkDiv).addClass("park");
@@ -373,6 +375,7 @@ $(".dropdown").change(function getResults(){
                 
                 .then(function(response){
             for (i=0; i < response.length; i++){
+                    console.log(response[i])
                 if (response[i].feature_desc === selectedFeature){
                     $(feat).push(response[i].feature_desc);
                     let parkDiv = createParkResults(response[i]);

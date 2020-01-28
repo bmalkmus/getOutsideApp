@@ -60,3 +60,7 @@ h5 {
     margin-right: auto;
     width: 50%;
 }
+
+.selectedDiv {
+    border: solid 4px darkorchid;
+}

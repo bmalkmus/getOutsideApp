@@ -62,7 +62,8 @@ function createRestResults(restObject){
     $(restImgDiv).append(restImg);
     let restLink = $('<a>');
     $(restLink).attr('href', restObject.restaurant.url);
-    $(restLink).text(restObject.restaurant.url);
+    $(restLink).attr('target', "_blank")
+    $(restLink).text("Click here for more information on " + restObject.restaurant.name);
     $(restDiv).append(restLink);
 
     return restDiv;
@@ -70,7 +71,6 @@ function createRestResults(restObject){
 
 
 $(document).ready(function(){
-console.log("ready");
 let ClosestList
 var queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?"
 
@@ -94,6 +94,7 @@ function successFunction(position) {
     })
             
     .then(function(response){
+        console.log(response);
         ClosestList = [];
     
         for (i = 0; i < response.length; i++){
@@ -151,7 +152,35 @@ function successFunction(position) {
             $(parkCard.append(parkDist));
             $('.results-container').append(closestparkDiv);
 
+            let selectParkLat = response[0].ypos;
+            let selectParkLong = response[0].xpos;
+            const c = 5;
+            var zomatoApiKey = 'f56d7ccb219fb8cce1bdc7e70b526b2f';
+    
+            var queryURL = "https://developers.zomato.com/api/v2.1/geocode?lat="+selectParkLat+"&lon="+selectParkLong+"&apikey=" + zomatoApiKey+"count="+c;
+
+    
+            $.ajax({
+                method: "GET",
+                url:queryURL,
+                headers: { "user-key": zomatoApiKey },
+            })
+            .then(function(response){
+                $('#restaurants').empty();
+                let closeRests = $('<h5>').text('The Closest Restaurants to the Closest Park');
+                $('#restaurants').append(closeRests);
+                
+
+                for (i = 0; i < 5; i++){
+                let restDiv = createRestResults(response.nearby_restaurants[i]);
+
+                $('#restaurants').append(restDiv);
+            }
+    });
+
         });
+
+        
 
     });
 
@@ -189,7 +218,13 @@ function successFunction(position) {
     });
 
 $(".dropdown").change(function getResults(){
+    $('#restaurants').empty();
+    $('#results').empty();
     $('.results-container').empty();
+    top5Park = $('<h5>').text('Random 5 Parks Within Search Criteria');
+    clickPrompt = $('<h6>').text('(Click Park for Restuarant Options)')
+    $('#results').append(top5Park);
+    $('#results').append(clickPrompt);
     var inputText =$('#maxDistance').val();
     var queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?"
     
@@ -328,12 +363,14 @@ $(".dropdown").change(function getResults(){
 
 // event handler for Rest. search
 
-$(document).on("click", ".park", function(){
+$(document).on("click",".park",function(){
+    $('.park').removeClass('selectedDiv');
+    console.log(this);
+    $(this).addClass('selectedDiv');
     selectParkLat = $(this).children()[3].textContent
     selectParkLong =$(this).children()[2].textContent
     const c = 5;
     var zomatoApiKey = 'f56d7ccb219fb8cce1bdc7e70b526b2f';
-    
     var queryURL = "https://developers.zomato.com/api/v2.1/geocode?lat="+selectParkLat+"&lon="+selectParkLong+"&apikey=" + zomatoApiKey+"count="+c;
 
     
@@ -344,6 +381,8 @@ $(document).on("click", ".park", function(){
     })
     .then(function(response){
         $('#restaurants').empty();
+        let closeRests = $('<h5>').text('The Closest Restaurants to the Selected Park');
+        $('#restaurants').append(closeRests);
         for (i = 0; i < 5; i++){
             let restDiv = createRestResults(response.nearby_restaurants[i]);
 

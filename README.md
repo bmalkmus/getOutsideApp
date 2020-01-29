@@ -12,7 +12,7 @@ Benjamin Malkmus<br>
 Seattle Parks API<br>
 Zomato API<br>
 Materialize CSS<br>
-We would like to thank of all my teachers and TAs at University of Washington's Coding Bootcamp. 
+We would like to thank of all our teachers and TAs at University of Washington's Coding Bootcamp. 
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)<br>

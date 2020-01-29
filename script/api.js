@@ -4,6 +4,8 @@ let parkCard;
 let feat;
 let parkP1;
 
+
+// creates park cards
 function createParkResults(parkObject){
     let parkDiv = $('<div>');
     $(parkDiv).addClass("park");
@@ -37,6 +39,7 @@ function createParkResults(parkObject){
     return parkDiv;
 }
 
+// creates restuarant cards
 function createRestResults(restObject){
     let restDiv = $('<div>');
     $(restDiv).addClass("rest");
@@ -79,7 +82,7 @@ $(document).ready(function(){
     else{
         alert("Geolocation is not allowed")
     }
-
+    // shuffle the parks list
     function shuffle(arr){
 
         var i = arr.length;
@@ -94,8 +97,30 @@ $(document).ready(function(){
         }
         return arr;
     }  
+    // function that fires if you type in a specific park
+    $('#search').click(function() {
+        var inputText = $('.validate').val();
+        var queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?name=" + inputText;
         
+        $.ajax({
+            url:queryURL,
+            method:"GET"
+        })
         
+        .then(function(response){
+            $('.results-container').empty();
+
+            $('#results').empty();
+            $('#restaurants').empty();
+        let searchparkDiv = createParkResults(response[0]);
+
+        $('.results-container').append(searchparkDiv);
+            
+
+        });
+    });
+     
+    // If location is allowed, this function runs
     function successFunction(position) {
         let currentLat = position.coords.latitude;
         let currentLon = position.coords.longitude;
@@ -208,28 +233,29 @@ $(document).ready(function(){
             }  
         });
 
-        $('#search').click(function() {
-            var inputText = $('.validate').val();
-            var queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?name=" + inputText;
+        // $('#search').click(function() {
+        //     var inputText = $('.validate').val();
+        //     var queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?name=" + inputText;
             
-            $.ajax({
-                url:queryURL,
-                method:"GET"
-            })
+        //     $.ajax({
+        //         url:queryURL,
+        //         method:"GET"
+        //     })
             
-            .then(function(response){
-                $('.results-container').empty();
+        //     .then(function(response){
+        //         $('.results-container').empty();
 
-                $('#results').empty();
-                $('#restaurants').empty();
-            let searchparkDiv = createParkResults(response[0]);
+        //         $('#results').empty();
+        //         $('#restaurants').empty();
+        //     let searchparkDiv = createParkResults(response[0]);
 
-            $('.results-container').append(searchparkDiv);
+        //     $('.results-container').append(searchparkDiv);
                 
 
-            });
-        });
+        //     });
+        // });
 
+        // Function fires when there is a change in the dropdown menus
         $(".dropdown").change(function getResults(){
             $('#restaurants').empty();
             $('#results').empty();
@@ -283,7 +309,7 @@ $(document).ready(function(){
 
                     DistanceList.push("No parks within your mile search of current location")
                 }
-
+                // filters out like values
                 Unique = [...new Set(DistanceList)];
                 UniqueFeatures =[...new Set(FeaturesList)];
 
@@ -372,8 +398,8 @@ $(document).ready(function(){
             })
 
         });
-    // event handler for Rest. search
 
+    // This function fires is there is a click on one of the parks to the left
         $(document).on("click",".park",function(){
             $('.park').removeClass('selectedDiv');
             console.log(this);
@@ -403,6 +429,7 @@ $(document).ready(function(){
 
     }
 
+    // Function to run if there is an error in the geolocation
     function errorPark(){ 
         
         $('#restaurants').empty();
@@ -451,6 +478,7 @@ $(document).ready(function(){
         })
     }
 
+    // prompts for the different geolocation errors
     function errorFunction(error){
             switch(error.code) {
                 case error.PERMISSION_DENIED:

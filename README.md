@@ -7,15 +7,15 @@ Please contact us via emailat for any support issues.
 
 ## Acknowledgment
 Matthew Benson <br>
-Nune Tangamyan\s\s
-Benjamin Malkmus\s\s
-Seattle Parks API\s\s
-Zomato API\s\s
-Materialize CSS\s\s
+Nune Tangamyan<br>
+Benjamin Malkmus<br>
+Seattle Parks API<br>
+Zomato API<br>
+Materialize CSS<br>
 We would like to thank of all my teachers and TAs at University of Washington's Coding Bootcamp. 
 
 ## License
-[MIT](https://choosealicense.com/licenses/mit/)\s\s
+[MIT](https://choosealicense.com/licenses/mit/)<br>
 Copyright (c) 2014-2018 Materialize
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

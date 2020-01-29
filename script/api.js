@@ -112,9 +112,36 @@ $(document).ready(function(){
 
             $('#results').empty();
             $('#restaurants').empty();
-        let searchparkDiv = createParkResults(response[0]);
+            let searchparkDiv = createParkResults(response[0]);
 
-        $('.results-container').append(searchparkDiv);
+            $('.results-container').append(searchparkDiv);
+
+            let selectParkLat = response[0].ypos;
+                let selectParkLong = response[0].xpos;
+                const c = 5;
+                var zomatoApiKey = 'f56d7ccb219fb8cce1bdc7e70b526b2f';
+    
+                var queryURL = "https://developers.zomato.com/api/v2.1/geocode?lat="+selectParkLat+"&lon="+selectParkLong+"&apikey=" + zomatoApiKey+"count="+c;
+
+    
+                $.ajax({
+                    method: "GET",
+                    url:queryURL,
+                    headers: { "user-key": zomatoApiKey },
+                })
+
+                .then(function(response){
+                    $('#restaurants').empty();
+                    let closeRests = $('<h5>').text('The Closest Restaurants to the Searched Park');
+                    $('#restaurants').append(closeRests);
+                
+
+                    for (i = 0; i < 5; i++){
+                        let restDiv = createRestResults(response.nearby_restaurants[i]);
+
+                        $('#restaurants').append(restDiv);
+                    }
+                });
             
 
         });

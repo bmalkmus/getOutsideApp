@@ -3,7 +3,7 @@
 ## Description
 Using third party API's, this website allows you to search for parks around you in Seattle along with 5 closest restuarants to that park's location. Upon loading of the webpage, you will be asked if you want to share your location. If you accept, the closest park to you will be displayed on the loading screen along with it's five closest restaurants. If you choose to block the location request, five random parks in Seattle will be loaded. On the loading screen, there are three different type of interactive boxes. The search box allows you to search for a specific park. The distance radius box will show 5 random parks within that radius from your location. The features boxes is responsive with the radius box and allows you to narrow your search results based off parks with certain features. From the populated park results below the boxes, you are then instructed to click on specific park cards to display the 5 closest restaurants. 
 ## Contact
-Please contact us via emailat for any support issues.
+Please contact us via email at for any support issues.
 
 ## Acknowledgment
 Matthew Benson <br>

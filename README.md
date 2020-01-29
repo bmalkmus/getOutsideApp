@@ -6,7 +6,7 @@ Using third party API's, this website allows you to search for parks around you 
 Please contact us via emailat for any support issues.
 
 ## Acknowledgment
-Matthew Benson\s\s
+Matthew Benson <br>
 Nune Tangamyan\s\s
 Benjamin Malkmus\s\s
 Seattle Parks API\s\s

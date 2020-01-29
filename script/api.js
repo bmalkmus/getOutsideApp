@@ -3,8 +3,11 @@ let selectParkLong;
 let parkCard;
 let feat;
 let parkP1;
+let cardcount = 0;
 
 function createParkResults(parkObject){
+    if (cardcount < 5){
+    console.log(cardcount);
     let parkDiv = $('<div>');
     $(parkDiv).addClass("park");
     $(parkDiv).addClass("card blue-grey darken-1");
@@ -37,6 +40,8 @@ function createParkResults(parkObject){
     $(parkDiv).append(selectParkLat);
     
     return parkDiv;
+    }
+    
 }
 
 function createRestResults(restObject){
@@ -58,11 +63,12 @@ function createRestResults(restObject){
     $(restImg).attr('id', 'imgSmall');
     $(restImg).attr('width', '200');
     $(restImg).attr('height', '100');
+    $(restImg).attr('src',restObject.restaurant.featured_image);
     $(restImg).attr('alt', 'Rest Pictures');
     $(restImgDiv).append(restImg);
     let restLink = $('<a>');
     $(restLink).attr('href', restObject.restaurant.url);
-    $(restLink).text(restObject.restaurant.url);
+    $(restLink).text("Visit Website");
     $(restDiv).append(restLink);
 
     return restDiv;
@@ -225,6 +231,7 @@ $('#parkfeatures').change(function() {
 
 $(".dropdown").change(function getResults(){
     $('.results-container').empty();
+    cardcount =0;
     var inputText =$('#maxDistance').val();
     var queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?"
     
@@ -260,6 +267,7 @@ $(".dropdown").change(function getResults(){
             DistanceList.push(response[i].name);
             FeaturesList.push(response[i].feature_desc);
             CombinedList.push(response[i].name, response[i].feature_desc);
+
 
  
         }
@@ -322,16 +330,22 @@ $(".dropdown").change(function getResults(){
             })
             
             .then(function(response){
-                console.log(response)
+                
                 feat = new Array();
+                
+                
                 let parkDiv = createParkResults(response[0]);
-                for (i = 0; i < response.length; i++){   
+                for (i = 0; i < response.length; i++){  
+                    
                 feat.push(" " + response[i].feature_desc);
+                    
             }
+            if(cardcount <5){
+                cardcount++
             parkP1 = $('<p>').text('Features: ' + feat);
             $(parkCard).append(parkP1);
             $('.results-container').append(parkDiv);
- 
+            }
         })
     }
 }
@@ -363,18 +377,33 @@ $(".dropdown").change(function getResults(){
                     url:queryURL,
                     method:"GET"
                 })
-                
                 .then(function(response){
             for (i=0; i < response.length; i++){
-                    console.log(response[i])
                 if (response[i].feature_desc === selectedFeature){
-                    $(feat).push(response[i].feature_desc);
+                            
                     let parkDiv = createParkResults(response[i]);
-                    parkP1 = $('<p>').text('Features: ' + response[i].feature_desc);
-                    $(parkCard).append(parkP1);
-
-
+                        if(cardcount < 5){
+                            let features = []
+                            cardcount++; 
+                                let park = response[i].name;
+                                console.log(response[i]);
+                            for (i = 0; i < CombinedList.length; i+=2){
+                                if(CombinedList[i] === park){
+                                    features.push(CombinedList[i+1])
+                                }
+                            }
+                            parkP1 = $('<p>').text('Features: ' + features);
+                            $(parkCard).append(parkP1);
+                            
+                        
                         $('.results-container').append(parkDiv);
+                    };
+                                
+                
+                        
+
+
+                        
                     
                 
                     }

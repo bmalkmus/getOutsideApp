@@ -6,13 +6,16 @@ Using third party API's, this website allows you to search for parks around you 
 Please contact us via emailat for any support issues.
 
 ## Acknowledgment
-Matthew Benson
-Nune Tangamyan
-Benjamin Malkmus
+Matthew Benson  return
+Nune Tangamyan  return
+Benjamin Malkmus  return
+Seattle Parks API  return
+Zomato API  return
+Materialize CSS  return
 We would like to thank of all my teachers and TAs at University of Washington's Coding Bootcamp. 
 
 ## License
-[MIT](https://choosealicense.com/licenses/mit/)
+[MIT](https://choosealicense.com/licenses/mit/)  return
 Copyright (c) 2014-2018 Materialize
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

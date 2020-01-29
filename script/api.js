@@ -5,6 +5,33 @@ let feat;
 let parkP1;
 let cardcount = 0;
 
+$('input').on('focus', function() {
+    $('label').hide();  
+});
+
+$('input').on('focusout', function() {
+    if($('#icon_prefix').val().length == 0){
+        $('label').show();
+    }  
+});
+
+// Park Pics
+(function($) {
+    $.rand = function(arg) {
+        if ($.isArray(arg)) {
+            return arg[$.rand(arg.length)];
+        } else if (typeof arg == "number") {
+            return Math.floor(Math.random() * arg);
+        } else {
+            return 4;  // chosen by fair dice roll
+        }
+    };
+})(jQuery);
+
+var items = ["Assets/flower1.jpg", "Assets/flower2.jpg", "Assets/flower3.jpg", "Assets/flower4.jpg", "Assets/flower5.jpg",];
+
+
+
 function createParkResults(parkObject){
     if (cardcount < 5){
     console.log(cardcount);
@@ -31,6 +58,7 @@ function createParkResults(parkObject){
     $(parkDiv).append(parkImgDiv);
     let parkImg = $('<img>');
     $(parkImg).addClass("imgSmall");
+    $(parkImg).attr('src', $.rand(items));
     $(parkImg).attr('id', 'imgSmall');
     $(parkImg).attr('width', '200');
     $(parkImg).attr('height', '100');
@@ -76,7 +104,6 @@ function createRestResults(restObject){
 
 
 $(document).ready(function(){
-
 let ClosestList
 var queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?"
 
@@ -211,22 +238,22 @@ function successFunction(position) {
 
 
 
-$('#parkfeatures').change(function() {
-    var featureText = $('#parkfeatures').val();
-    var queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?feature_desc=" + featureText;
-    var results = $('.results-container');
-    $.ajax({
-        url:queryURL,
-        method:"GET"
-    }).then(function(response){
-        $('.results-container').empty();
-        $('#results').empty();
-        $('#restaurants').empty();
-        for (i = 0; i < response.length; i ++){
-            let parkDiv = createParkResults(response[i]);
-            $('.results-container').append(parkDiv);
-        }
-});
+// $('#parkfeatures').change(function() {
+//     var featureText = $('#parkfeatures').val();
+//     var queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?feature_desc=" + featureText;
+//     var results = $('.results-container');
+//     $.ajax({
+//         url:queryURL,
+//         method:"GET"
+//     }).then(function(response){
+//         $('.results-container').empty();
+//         $('#results').empty();
+//         $('#restaurants').empty();
+//         for (i = 0; i < response.length; i ++){
+//             let parkDiv = createParkResults(response[i]);
+//             $('.results-container').append(parkDiv);
+//         }
+// });
 
 
 $(".dropdown").change(function getResults(){
@@ -312,7 +339,7 @@ $(".dropdown").change(function getResults(){
             // $('.results-container').empty();
   
             // if user did not select a feature, basic search function is applied
-        if($("#parkfeatures option:selected").text() === "No Preference"){
+    if($("#parkfeatures option:selected").text() === "No Preference"){
         //     console.log($("#parkfeatures option:selected").text());
         $('.results-container').empty();
 
@@ -373,10 +400,11 @@ $(".dropdown").change(function getResults(){
                 let inputText = Unique[i];
                 let queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?name=" + inputText;
                 let results = $('.results-container');
-                $.ajax({
+            $.ajax({
                     url:queryURL,
                     method:"GET"
                 })
+
                 .then(function(response){
             for (i=0; i < response.length; i++){
                 if (response[i].feature_desc === selectedFeature){
@@ -407,7 +435,7 @@ $(".dropdown").change(function getResults(){
                     
                 
                     }
-                }
+            }
             
             });
         
@@ -416,9 +444,10 @@ $(".dropdown").change(function getResults(){
         })
         
         
+})
         // event handler for Rest. search
         
-        $(document).on("click", ".park", function(){
+$(document).on("click", ".park", function(){
             selectParkLat = $(this).children()[3].textContent
             selectParkLong =$(this).children()[2].textContent
             const c = 5;
@@ -440,11 +469,11 @@ $(".dropdown").change(function getResults(){
                     $('#restaurants').append(restDiv);
                 }
             });
-        })
+})
         
-        })
-    }
+// }
 
+};
 
     function errorFunction(error){
         switch(error.code) {

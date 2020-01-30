@@ -3,10 +3,12 @@ let selectParkLong;
 let parkCard;
 let feat;
 let parkP1;
+let cardcount = 0
 
 
 // creates park cards
 function createParkResults(parkObject){
+    if (cardcount < 5){
     let parkDiv = $('<div>');
     $(parkDiv).addClass("park");
     $(parkDiv).addClass("card blue-grey darken-1");
@@ -32,12 +34,33 @@ function createParkResults(parkObject){
     $(parkImg).attr('width', '200');
     $(parkImg).attr('height', '100');
     $(parkImg).attr('alt', 'Park Picture');
+    $(parkImg).attr('src', $.rand(items));
     $(parkImgDiv).append(parkImg);
     $(parkDiv).append(selectParkLong);
     $(parkDiv).append(selectParkLat);
     
     return parkDiv;
+    }
+    
 }
+
+// Park Images
+(function($) {
+    $.rand = function(arg) {
+        if ($.isArray(arg)) {
+            return arg[$.rand(arg.length)];
+        } 
+        else if (typeof arg == "number") {
+            return Math.floor(Math.random() * arg);
+        } 
+        else {
+            return 4;  // chosen by fair dice roll
+        }
+    };
+})
+
+(jQuery);
+var items = ["Assets/flower1.jpg", "Assets/flower2.jpg", "Assets/flower3.jpg", "Assets/flower4.jpg", "Assets/flower5.jpg",];
 
 // creates restuarant cards
 function createRestResults(restObject){
@@ -59,7 +82,8 @@ function createRestResults(restObject){
     $(restImg).attr('id', 'imgSmall');
     $(restImg).attr('width', '200');
     $(restImg).attr('height', '100');
-    $(restImg).attr('alt', 'Rest Pictures');
+    $(restImg).attr('src',restObject.restaurant.featured_image);
+    $(restImg).attr('alt', 'Top Cuisine Picture Unavailable');
     $(restImgDiv).append(restImg);
     let restLink = $('<a>');
     $(restLink).attr('href', restObject.restaurant.url);
@@ -80,7 +104,7 @@ $(document).ready(function(){
     }
 
     else{
-        alert("Geolocation is not allowed")
+        errorPark();
     }
     // shuffle the parks list
     function shuffle(arr){
@@ -244,9 +268,6 @@ $(document).ready(function(){
                 });
 
             });
-
-        
-
         });
 
   
@@ -260,30 +281,9 @@ $(document).ready(function(){
             }  
         });
 
-        // $('#search').click(function() {
-        //     var inputText = $('.validate').val();
-        //     var queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?name=" + inputText;
-            
-        //     $.ajax({
-        //         url:queryURL,
-        //         method:"GET"
-        //     })
-            
-        //     .then(function(response){
-        //         $('.results-container').empty();
-
-        //         $('#results').empty();
-        //         $('#restaurants').empty();
-        //     let searchparkDiv = createParkResults(response[0]);
-
-        //     $('.results-container').append(searchparkDiv);
-                
-
-        //     });
-        // });
-
         // Function fires when there is a change in the dropdown menus
         $(".dropdown").change(function getResults(){
+            cardcount = 0;
             $('#restaurants').empty();
             $('#results').empty();
             $('.results-container').empty();
@@ -292,6 +292,7 @@ $(document).ready(function(){
             $('#results').append(top5Park);
             $('#results').append(clickPrompt);
             var inputText =$('#maxDistance').val();
+            console.log(inputText);
             var queryURL = "https://data.seattle.gov/resource/j9km-ydkc.json?"
         
             $.ajax({
@@ -300,7 +301,7 @@ $(document).ready(function(){
             })
         
             .then(function(response){
-            // Created new variables "FeaturesList" and "CombinedList" to pull additional info from the location based results, 
+                // Created new variables "FeaturesList" and "CombinedList" to pull additional info from the location based results, 
                 let DistanceList =[];
             // features list is used to pull the features to populate the drop down list
                 let FeaturesList=[];
@@ -325,7 +326,7 @@ $(document).ready(function(){
                     if (dist > .001 && dist <= inputText){
                         DistanceList.push(response[i].name);
                         FeaturesList.push(response[i].feature_desc);
-                        CombinedList.push(response[i].name, response[i].feature_desc);
+                        CombinedList.push(response[i].name,  " " +response[i].feature_desc);
 
     
                     }
@@ -340,23 +341,7 @@ $(document).ready(function(){
                 Unique = [...new Set(DistanceList)];
                 UniqueFeatures =[...new Set(FeaturesList)];
 
-            // function shuffle(arr){
-
-            //     var i = arr.length;
-            //     var j;
-            //     var temp;
-                
-            //     while(--i>0){
-            //         j = Math.floor(Math.random()*(i+1));
-            //         temp = arr[j];
-            //         arr[j] = arr[i];
-            //         arr[i] = temp;
-            //     }
-            //     return arr;
-            //     }
-
                 shuffle(Unique);
-                console.log(Unique);
             // The below functions sort the retrieved features and append them to the drop down list
                 UniqueFeatures.sort();
                 UniqueFeatures.forEach(element => $("#parkfeatures").append("<option value=\""+element+"\">"+element+"</option>"));
@@ -378,20 +363,23 @@ $(document).ready(function(){
                             })
                     
                             .then(function(response){
+                                console.log(response);
                                 feat = new Array();
                                 let parkDiv = createParkResults(response[0]);
                                 for (i = 0; i < response.length; i++){   
-                                feat.push(" " + response[i].feature_desc);
-                            }
-                            parkP1 = $('<p>').text('Features: ' + feat);
-                            $(parkCard).append(parkP1);
-                            $('.results-container').append(parkDiv);
-        
-                            })
+                                    feat.push(" " + response[i].feature_desc);
+                                }
+                                if(cardcount <5){
+                                    cardcount++
+                                    parkP1 = $('<p>').text('Features: ' + feat);
+                                    $(parkCard).append(parkP1);
+                                    $('.results-container').append(parkDiv);
+                                }
+                            });
                         }
                     }
-                } 
-        
+                }
+
                 else {
                 // if a feature is chosen, its compared to the Combined list and prints the park name and feature
                     let selectedFeature = $("#parkfeatures option:selected").text();
@@ -402,29 +390,38 @@ $(document).ready(function(){
                             url:queryURL,
                             method:"GET"
                         })
-                        
                         .then(function(response){
                             for (i=0; i < response.length; i++){
-
                                 if (response[i].feature_desc === selectedFeature){
-                                    $(feat).push(response[i].feature_desc);
+                                    
                                     let parkDiv = createParkResults(response[i]);
-                                    parkP1 = $('<p>').text('Features: ' + response[i].feature_desc);
-                                    $(parkCard).append(parkP1);
-                                    $('.results-container').append(parkDiv);
-                            
-                        
+                                    if(cardcount < 5){
+                                        let features = []
+                                        cardcount++; 
+                                        let park = response[i].name;
+                                            for (i = 0; i < CombinedList.length; i+=2) {
+                                                if(CombinedList[i] === park){
+                                                    features.push(CombinedList[i+1])
+                                                    
+                                                };
+                                            }   
+                                            
+                                            parkP1 = $('<p>').text('Features: ' + features);
+                                            $(parkCard).append(parkP1);
+                                    
+                                
+                                            $('.results-container').append(parkDiv);
+            
+
+
+                                    }
                                 }
                             }
-            
-                        });
-
+                        })
                     }
-                };
-
+                }
             })
-
-        });
+        })
 
     // This function fires is there is a click on one of the parks to the left
         $(document).on("click",".park",function(){
@@ -447,6 +444,7 @@ $(document).ready(function(){
                 $('#restaurants').empty();
                 let closeRests = $('<h5>').text('The Closest Restaurants to the Selected Park');
                 $('#restaurants').append(closeRests);
+
                 for (i = 0; i < 5; i++){
                     let restDiv = createRestResults(response.nearby_restaurants[i]);
                     $('#restaurants').append(restDiv);
@@ -455,6 +453,9 @@ $(document).ready(function(){
         });
 
     }
+            
+
+    
 
     // Function to run if there is an error in the geolocation
     function errorPark(){ 
@@ -497,7 +498,7 @@ $(document).ready(function(){
                             parkP1 = $('<p>').text('Features: ' + feat);
                             $(parkCard).append(parkP1);
                             $('.results-container').append(parkDiv);
-    
+
                         })
                     }
             }
@@ -505,7 +506,7 @@ $(document).ready(function(){
         })
     }
 
-    // prompts for the different geolocation errors
+// prompts for the different geolocation errors
     function errorFunction(error){
             switch(error.code) {
                 case error.PERMISSION_DENIED:
@@ -553,7 +554,6 @@ $(document).ready(function(){
                 });
             });
     }
-    
 });
 
 

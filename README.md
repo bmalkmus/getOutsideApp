@@ -17,6 +17,10 @@ Zomato API<br>
 Materialize CSS<br>
 We would like to thank of all our teachers and TAs at University of Washington's Coding Bootcamp. 
 
+## Deployment
+
+https://bmalkmus.github.io/getOutsideApp/
+
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)<br>
 Copyright (c) 2014-2018 Materialize

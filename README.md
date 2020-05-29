@@ -21,6 +21,9 @@ We would like to thank of all our teachers and TAs at University of Washington's
 
 https://bmalkmus.github.io/getOutsideApp/
 
+## Screenshot
+!(Screenshot)(ParkApp.png)
+
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)<br>
 Copyright (c) 2014-2018 Materialize
